@@ -1,0 +1,113 @@
+{
+  "business_profile": {
+    "business_name": "Gousto (SCA Investments Limited)",
+    "business_url": "https://www.gousto.co.uk",
+    "headquarters": "Shepherd's Bush, London, England",
+    "founding_year": "2012",
+    "founders": [
+      "Timo Boldt",
+      "James Carter"
+    ],
+    "ownership_model": "Private; venture-backed (investors include BGF, MMC Ventures, Unilever Ventures)",
+    "industry_tags": [
+      "Meal kits",
+      "Ecommerce",
+      "Food logistics",
+      "Direct-to-consumer"
+    ],
+    "revenue_band": "£310m–£320m (FY2024 revenue, Source S4)",
+    "headcount_info": "Approx. 900 employees (2021-2022 disclosures)",
+    "mission_snippet": "\"We believe home cooking should be easy, tasty, and good for you\" (Company website, About page).",
+    "source_ids": [
+      "S1"
+    ]
+  },
+  "operating_context": {
+    "go_to_market_notes": "Subscription and on-demand meal kit deliveries across Great Britain, Northern Ireland, and Republic of Ireland. Customer acquisition via digital marketing, partnerships, and trial discounts.",
+    "operating_model_insights": [
+      "Recipe development and menu planning on 100+ weekly SKUs; heavy reliance on forecasting for perishable inventory.",
+      "Two highly automated production sites (Warrington, Clay Lake) orchestrated by Factory API services and PLC integrations (Source S3).",
+      "Centralised manufacturing and packing facilities ship insulated boxes via third-party logistics partners (e.g., Evri, Yodel).",
+      "Mobile app and web platform manage menu selection, order scheduling, and customer support, supported by proprietary subscription technology (Source S5)."
+    ],
+    "pain_point_indicators": [
+      {
+        "description": "Customer complaints cite missing ingredients, ingredient freshness concerns, and late deliveries impacting experience.",
+        "source_ids": [
+          "S2"
+        ]
+      },
+      {
+        "description": "Operational scaling challenges flagged in media; need current confirmation on workforce changes and cost-control initiatives.",
+        "source_ids": [],
+        "notes": "Data gap – capture latest coverage on staffing and profitability push."
+      }
+    ],
+    "data_assets": [
+      "Transactional order history and customer preferences (recipes chosen, ratings).",
+      "Ingredient supplier data, inventory levels, and cold-chain tracking.",
+      "Customer support interactions (chat, email) capturing service issues and sentiment."
+    ],
+    "tech_stack_notes": "Public job listings reference data engineering with Python, SQL, dbt; BI via Looker; infrastructure on AWS; experimentation platforms for personalisation. Factory API abstracts warehouse systems; in-house algorithms (Auto Replenish, Auto Routing, Pick Face Optimisation) drive fulfilment efficiency (Sources S3, S5).",
+    "regulatory_notes": [
+      "Food safety compliance (UK Food Standards Agency, HACCP).",
+      "GDPR obligations for customer data.",
+      "Sustainability reporting expectations for packaging and waste."
+    ],
+    "recent_headlines": [
+      {
+        "summary": "FY2024 revenue reached £312m with record adjusted EBITDA of £42m and <1% operational food waste; 2025 guidance targets 5–10% growth.",
+        "source_ids": [
+          "S4"
+        ]
+      },
+      {
+        "summary": "Automation investments at the Warrington site delivered 140% faster pack speeds and 99.97% pick accuracy, underpinning £26m underlying EBITDA in 2023.",
+        "source_ids": [
+          "S5",
+          "S3"
+        ]
+      }
+    ],
+    "competitor_list": [
+      "HelloFresh UK",
+      "Mindful Chef",
+      "SimplyCook",
+      "Oddbox",
+      "Allplants"
+    ],
+    "researcher_notes": "Need verified FY2024 Companies House filings, courier SLA performance data, and insight into current next-day delivery trials."
+  },
+  "source_catalogue": [
+    {
+      "id": "S1",
+      "title": "Gousto - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Gousto",
+      "retrieved": "2025-10-07"
+    },
+    {
+      "id": "S2",
+      "title": "Gousto Reviews | Trustpilot",
+      "url": "https://uk.trustpilot.com/review/gousto.co.uk",
+      "retrieved": "2025-10-07"
+    },
+    {
+      "id": "S3",
+      "title": "Inside Gousto's Factory API: Simplifying Complexity in a Data-Driven Kitchen",
+      "url": "https://medium.com/gousto-engineering-techbrunch/inside-goustos-factory-api-simplifying-complexity-in-a-data-driven-kitchen-ad34901086de",
+      "retrieved": "2025-10-07"
+    },
+    {
+      "id": "S4",
+      "title": "How Does Gousto Company Work?",
+      "url": "https://canvasbusinessmodel.com/blogs/how-it-works/gousto-how-it-works",
+      "retrieved": "2025-10-07"
+    },
+    {
+      "id": "S5",
+      "title": "Tech and AI Help Gousto Return to Profitability",
+      "url": "https://www.hulkapps.com/blogs/ecommerce-hub/tech-and-ai-help-gousto-return-to-profitability",
+      "retrieved": "2025-10-07"
+    }
+  ]
+}

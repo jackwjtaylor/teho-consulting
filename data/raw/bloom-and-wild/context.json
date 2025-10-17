@@ -1,0 +1,82 @@
+{
+  "business_name": "Bloom & Wild Ltd",
+  "business_url": "https://www.bloomandwild.com",
+  "headquarters": "London, England, United Kingdom",
+  "industry_tags": [
+    "Ecommerce",
+    "Flowers",
+    "Gifting"
+  ],
+  "revenue_band": "UNKNOWN (Data gap – confirm latest filings post-2021)",
+  "headcount_info": "Approx. 400 employees (LinkedIn, Oct 2025)",
+  "founding_year": "2013",
+  "ownership_model": "Private; venture-backed (investors include General Catalyst, Index Ventures)",
+  "product_summary": [
+    "Letterbox flower bouquets and gifts",
+    "Next-day and same-day flower delivery across the UK",
+    "Flower subscriptions and curated gifting hampers"
+  ],
+  "mission_snippet": "We’re here to help you care wildly.",
+  "courier_partners": [],
+  "go_to_market_notes": [
+    "Direct-to-consumer ecommerce model via website and mobile app",
+    "Subscription reminders and gifting prompts drive repeat purchases",
+    "Operates across UK, Ireland, Germany, France and the Netherlands following Bloomon acquisition"
+  ],
+  "operating_model_insights": [
+    "Letterbox-friendly packaging enables delivery through standard UK mail slots",
+    "Central fulfilment network with growers across the Netherlands, UK and Kenya (per company blog)",
+    "Acquired Bloomon in 2021 to scale continental European operations"
+  ],
+  "pain_point_indicators": [
+    "Trustpilot reviews highlight occasional courier delays and wilted stems on arrival (Data gap – quantify)",
+    "Seasonal peaks (Mother’s Day, Valentine’s) stretch capacity and can lengthen delivery windows"
+  ],
+  "tech_stack_notes": [
+    "Data science and forecasting roles reference Python, SQL and Looker",
+    "Marketing technology stack includes Braze for lifecycle communications"
+  ],
+  "data_assets": [
+    "Customer order and recipient history",
+    "Delivery performance and courier scan data",
+    "Subscription cadence, reminders and marketing engagement",
+    "Product performance by bouquet recipe"
+  ],
+  "regulatory_notes": [
+    "GDPR for customer data across UK and EU",
+    "Plant health and phytosanitary rules for cross-border flower shipments",
+    "Consumer contracts regulations for online gifting"
+  ],
+  "recent_headlines": [
+    {
+      "title": "Bloom & Wild raises £75M Series D and reports 160% revenue growth",
+      "summary": "Series D funding fuels expansion across Europe and focuses on tech, sustainability and partnerships like Sainsbury's retail range.",
+      "url": "https://www.uktech.news/news/london-bloom-and-wild-online-flower-delivery-startup-funding-20210118",
+      "date": "2021-01-18",
+      "confidence": "medium"
+    },
+    {
+      "title": "Bloom & Wild acquires Dutch rival Bloomon",
+      "summary": "Acquisition expands footprint across Benelux and positions the business as Europe's largest online flower delivery provider.",
+      "url": "https://www.uktech.news/news/londons-online-florist-bloom-wild-acquires-their-dutch-rival-bloomon-20210422",
+      "date": "2021-04-22",
+      "confidence": "medium"
+    },
+    {
+      "title": "Bloom & Wild secures additional £50m and acquires Bergamotte",
+      "summary": "Further funding and acquisition quadruple the French business and target £200m+ revenues.",
+      "url": "https://www.uktech.news/startups/letterbox-flower-company-bloom-wild-raises-funding",
+      "date": "2021-07-28",
+      "confidence": "medium"
+    }
+  ],
+  "competitor_list": [
+    "Interflora",
+    "Freddie's Flowers",
+    "Arena Flowers",
+    "Floom"
+  ],
+  "researcher_notes": "Need verified FY2024 revenue, profitability data, current press coverage and confirmed courier partner list. Validate CEO email pattern before outreach.",
+  "primary_contact": "Aron Gelbard — Co-founder & CEO",
+  "primary_email": "UNKNOWN"
+}

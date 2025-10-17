@@ -1,0 +1,2 @@
+[console_scripts]
+teho = teho_automation.cli:app
