@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Request a Briefing | Teho Consulting</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <header class="nav">
+      <div class="container nav__inner">
+        <a class="brand" href="index.html">Teho Consulting</a>
+        <a class="btn btn--ghost" href="index.html">Back</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container" style="max-width: 640px;">
+          <h1>Request your AI opportunity briefing</h1>
+          <p class="section__lead">Tell us who you want to influence. You’ll get the opportunity snapshot for free. Want the full briefing? We’ll confirm pricing (typically £300–£500) and timing before delivery.</p>
+          <form class="card" method="post" action="#" data-teho-form data-endpoint="">
+            <label>Full name
+              <input type="text" name="name" required placeholder="Alex Taylor" />
+            </label>
+            <label>Work email
+              <input type="email" name="email" required placeholder="alex@company.com" />
+            </label>
+            <label>Target company
+              <input type="text" name="company" required placeholder="Bloom &amp; Wild" />
+            </label>
+            <label>Primary persona
+              <select name="persona" required>
+                <option value="" disabled selected>Select one</option>
+                <option value="founder">Founder / CEO</option>
+                <option value="operations">COO / Operations</option>
+                <option value="finance">CFO / Finance</option>
+                <option value="product">Product / Growth</option>
+                <option value="other">Other leadership</option>
+              </select>
+            </label>
+            <label>Objective (optional)
+              <textarea name="objective" placeholder="Open door for a strategic conversation, prep for a board update, etc."></textarea>
+            </label>
+            <label style="display:flex;align-items:center;gap:0.6rem;font-size:0.95rem;">
+              <input type="checkbox" name="consent" required />
+              I agree to receive communications from Teho Consulting.
+            </label>
+            <button class="btn btn--primary" type="submit">Submit request</button>
+          </form>
+
+          <div class="card" style="margin-top:1.5rem;">
+            <h3>What happens next?</h3>
+            <ol>
+              <li>We confirm the scope, whether you want only the snapshot or the full briefing, and the delivery date.</li>
+              <li>Teho prepares the assets and we share payment details for any paid add-ons.</li>
+              <li>We deliver everything digitally and, if selected, schedule your debrief call.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="assets/form.js"></script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-slug,domain,status,priority,primary_contact,primary_email
-gousto,gousto.co.uk,complete,1,Timo Boldt — Founder,UNKNOWN
-bloom-and-wild,bloomandwild.com,ready,2,UNKNOWN,UNKNOWN
-zego,zego.com,backlog,3,UNKNOWN,UNKNOWN
+company_name,slug,domain,status,priority,persona,primary_contact,primary_email,requested_at,source
+Gousto,gousto,gousto.co.uk,complete,1,Founder/CEO,Timo Boldt — Founder,UNKNOWN,2025-10-17T00:00:00,manual
+Bloom & Wild,bloom-and-wild,bloomandwild.com,ready,2,COO/Operations,UNKNOWN,UNKNOWN,2025-10-17T00:00:00,manual
+Zego,zego,zego.com,backlog,3,Founder/CEO,UNKNOWN,UNKNOWN,2025-10-17T00:00:00,manual

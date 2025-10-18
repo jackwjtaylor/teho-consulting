@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import csv
 import json
+from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 
@@ -99,6 +101,63 @@ def collect_signals(slug: str, domain: str = typer.Option(..., help="Company dom
         typer.secho("Context file missing. Run init-company first.", fg=typer.colors.RED)
         raise typer.Exit(code=1)
     typer.secho(f"Stored automation signals at {output}", fg=typer.colors.GREEN)
+
+
+@app.command()
+def queue_request(
+    company_name: str = typer.Argument(..., help="Company name, e.g. 'Bloom & Wild'"),
+    domain: str = typer.Option(..., help="Primary domain, e.g. bloomandwild.com"),
+    slug: Optional[str] = typer.Option(None, help="Slug to use; defaults to kebab-case company name"),
+    persona: Optional[str] = typer.Option(None, help="Target persona e.g. Founder/CEO"),
+    contact: Optional[str] = typer.Option(None, help="Primary contact name"),
+    email: Optional[str] = typer.Option(None, help="Primary contact email"),
+    priority: int = typer.Option(5, help="Priority (1 = highest)"),
+    source: str = typer.Option("manual", help="Source for tracking e.g. manual, website"),
+) -> None:
+    """Add a company request to the queue for snapshot/briefing generation."""
+
+    queue_path = Path("data/company_queue.csv")
+    queue_path.parent.mkdir(parents=True, exist_ok=True)
+
+    slug_value = slug or "".join(ch.lower() if ch.isalnum() or ch == " " else " " for ch in company_name).strip().replace(" ", "-")
+    if not slug_value:
+        typer.secho("Unable to derive slug from company name.", fg=typer.colors.RED)
+        raise typer.Exit(code=1)
+
+    record = {
+        "company_name": company_name,
+        "slug": slug_value,
+        "domain": domain,
+        "status": "queued",
+        "priority": str(priority),
+        "persona": persona or "",
+        "primary_contact": contact or "",
+        "primary_email": email or "",
+        "requested_at": datetime.utcnow().isoformat(timespec="seconds"),
+        "source": source,
+    }
+
+    headers = [
+        "company_name",
+        "slug",
+        "domain",
+        "status",
+        "priority",
+        "persona",
+        "primary_contact",
+        "primary_email",
+        "requested_at",
+        "source",
+    ]
+
+    file_exists = queue_path.exists() and queue_path.stat().st_size > 0
+    with queue_path.open("a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=headers)
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(record)
+
+    typer.secho(f"Queued {company_name} ({slug_value}) for briefing", fg=typer.colors.GREEN)
 
 
 @app.command()

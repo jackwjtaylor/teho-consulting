@@ -3,17 +3,19 @@
 ## Doing now
 
 - [ ] Confirm Bloom & Wild courier partners, refund metrics, and primary outreach email; rerun validation afterwards.  
-- [ ] Prepare teho.ai landing page concept (copy + data capture requirements).  
+- [ ] Wire the `get-started` form to capture submissions in Postgres/Supabase (snapshot + full briefing options).  
 - [ ] Update automation runbooks (data collection, QA, packaging) for repeatability.
 
 ## Lined up next
 
-- [ ] Build the teho.ai landing experience (form + gating) once concept approved.  
+- [ ] Build manual “internal trigger” flow (CLI/CRM input) to create briefs without form submission.  
 - [ ] Choose interim orchestration (cron/GitHub Actions) and document when to upgrade to Prefect/Temporal.  
 - [ ] Implement outreach metrics pipeline (webhooks, Postgres/Supabase, dashboard).  
 - [ ] Outline runbooks so others can handle data collection, QA, outreach (extend from draft).  
 - [ ] Define compliance/infosec measures (consent logging, data retention, secrets management).  
-- [ ] Map process for refreshing financial data every quarter across all target companies.
+- [ ] Map process for refreshing financial data every quarter across all target companies.  
+- [ ] Define pricing & payment flow for full briefing unlocks and advisory services (invoice, Stripe, etc.).  
+- [ ] Draft customer-facing email templates (snapshot delivery, full briefing upsell, call follow-up).
 
 ## Already done
 
@@ -32,3 +34,4 @@
 - [x] Automated packaging (HTML/email draft with optional PDF support).  
 - [x] Designed outreach metrics dashboard plan.  
 - [x] Completed Bloom & Wild data pack (context, sources, reports) with outstanding data gaps flagged.***
+- [x] Rebuilt teho.ai marketing site with new product ladder and value-focused messaging.
