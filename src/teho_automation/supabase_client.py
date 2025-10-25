@@ -21,6 +21,7 @@ except Exception:  # pragma: no cover - handled gracefully
 
 TABLE_NAME = "briefing_requests"
 REPORTS_BUCKET = "reports"
+ATTACHMENTS_BUCKET = os.getenv("ATTACHMENTS_BUCKET", "briefing-uploads")
 
 
 @dataclass
@@ -148,6 +149,39 @@ def upload_report_asset(slug: str, file_path: Path, folder: Optional[str] = None
             return SupabaseResult(success=False, message=str(exc))
 
     return SupabaseResult(success=True, message=destination)
+
+
+def fetch_briefing_attachments(request_id: str) -> SupabaseResult:
+    client = _build_client()
+    if client is None:
+        return SupabaseResult(success=False, message="Supabase not configured")
+
+    try:
+        response = (
+            client.table("briefing_attachments")
+            .select("id, file_name, storage_path, mime_type, size_bytes, uploaded_by, created_at")
+            .eq("request_id", request_id)
+            .order("created_at", desc=True)
+            .execute()
+        )
+        return SupabaseResult(success=True, data=response.data or [], message="Fetched")
+    except Exception as exc:  # pragma: no cover
+        return SupabaseResult(success=False, message=str(exc))
+
+
+def download_attachment_blob(storage_path: str, bucket: Optional[str] = None) -> SupabaseResult:
+    client = _build_client()
+    if client is None:
+        return SupabaseResult(success=False, message="Supabase not configured")
+
+    bucket_name = bucket or ATTACHMENTS_BUCKET
+    storage = client.storage
+    resource = storage.from_(bucket_name)
+    try:
+        data = resource.download(storage_path)
+        return SupabaseResult(success=True, data=data, message="Downloaded")
+    except Exception as exc:  # pragma: no cover
+        return SupabaseResult(success=False, message=str(exc))
 
 
 def upsert_report_entry(record: Dict[str, Any]) -> SupabaseResult:

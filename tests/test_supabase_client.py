@@ -181,3 +181,21 @@ def test_update_automation_run_calls_supabase(monkeypatch):
     assert captured["patch"]["payload"]["attempts"] == 1
     assert "updated_at" in captured["patch"]
     assert captured["executed"] is True
+
+
+def test_fetch_briefing_attachments_without_env(monkeypatch):
+    monkeypatch.delenv("SUPABASE_URL", raising=False)
+    monkeypatch.delenv("SUPABASE_SERVICE_KEY", raising=False)
+    monkeypatch.setenv("DOTENV_PATH", "/dev/null")
+
+    result = supabase_client.fetch_briefing_attachments("request-1")
+    assert result.success is False
+
+
+def test_download_attachment_blob_without_env(monkeypatch):
+    monkeypatch.delenv("SUPABASE_URL", raising=False)
+    monkeypatch.delenv("SUPABASE_SERVICE_KEY", raising=False)
+    monkeypatch.setenv("DOTENV_PATH", "/dev/null")
+
+    result = supabase_client.download_attachment_blob("path/to/file")
+    assert result.success is False

@@ -5,6 +5,7 @@ from __future__ import annotations
 import csv
 import json
 import time
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -32,8 +33,10 @@ from .paths import get_company_paths
 from .prompt_runner import PromptRunner, validate_report_structure
 from .prompt_templates import build_prompt, load_prompt_templates
 from .supabase_client import (
+    download_attachment_blob,
     ensure_reports_bucket,
     fetch_automation_runs,
+    fetch_briefing_attachments,
     fetch_requests,
     insert_briefing_request,
     log_outreach_event,
@@ -111,7 +114,7 @@ def validate_context(path: Path) -> None:
 def init_company(slug: str, base_dir: Optional[Path] = None) -> None:
     """Create folder skeleton for a company."""
     paths = get_company_paths(slug, base_dir)
-    for directory in [paths.raw_dir, paths.reports_dir, paths.base_dir / "logs" / "qa"]:
+    for directory in [paths.raw_dir, paths.attachments_dir, paths.reports_dir, paths.base_dir / "logs" / "qa"]:
         directory.mkdir(parents=True, exist_ok=True)
 
     context_template = CompanyContext(
@@ -316,6 +319,56 @@ def _write_context_defaults(slug: str, company_name: str, contact: str, email: s
         paths.context_file.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
 
+def _sync_request_attachments(request: Dict[str, Any], paths: CompanyPaths) -> None:
+    request_id = request.get("id")
+    if not request_id:
+        return
+
+    result = fetch_briefing_attachments(str(request_id))
+    if not result.success:
+        typer.secho(
+            f"Unable to fetch attachments for {paths.slug}: {result.message}",
+            fg=typer.colors.YELLOW,
+        )
+        return
+
+    attachments: List[Dict[str, Any]] = result.data or []  # type: ignore[assignment]
+    if not attachments:
+        return
+
+    paths.attachments_dir.mkdir(parents=True, exist_ok=True)
+    downloaded = 0
+    for attachment in attachments:
+        storage_path = attachment.get("storage_path")
+        if not storage_path:
+            continue
+        file_name = attachment.get("file_name") or Path(storage_path).name
+        safe_name = _sanitize_filename(file_name)
+        destination = paths.attachments_dir / safe_name
+        if destination.exists():
+            continue
+        blob = download_attachment_blob(storage_path)
+        if not blob.success or blob.data is None:
+            typer.secho(
+                f"Unable to download attachment {file_name}: {blob.message}",
+                fg=typer.colors.YELLOW,
+            )
+            continue
+        destination.write_bytes(blob.data)
+        downloaded += 1
+
+    if downloaded:
+        typer.secho(
+            f"Downloaded {downloaded} attachment(s) for {paths.slug}",
+            fg=typer.colors.GREEN,
+        )
+
+
+def _sanitize_filename(name: str) -> str:
+    sanitized = re.sub(r"[^A-Za-z0-9._-]+", "-", name).strip("-._")
+    return sanitized or "attachment"
+
+
 @app.command()
 def process_queue(
     limit: int = typer.Option(1, help="Number of queued requests to process"),
@@ -351,6 +404,7 @@ def process_queue(
         domain = entry.get("domain", "") or entry.get("payload", {}).get("domain", "")
         primary_contact = entry.get("primary_contact", "")
         primary_email = entry.get("primary_email", "")
+        paths = get_company_paths(slug)
 
         typer.secho(f"Processing {company_name} ({slug})", fg=typer.colors.CYAN)
 
@@ -365,6 +419,7 @@ def process_queue(
 
         init_company(slug)
         _write_context_defaults(slug, company_name, primary_contact, primary_email)
+        _sync_request_attachments(entry, paths)
 
         if domain:
             try:
@@ -375,7 +430,6 @@ def process_queue(
         else:
             typer.secho("No domain provided; skipping automated collection.", fg=typer.colors.YELLOW)
 
-        paths = get_company_paths(slug)
         try:
             context = load_context(str(paths.context_file))
         except ValueError as exc:

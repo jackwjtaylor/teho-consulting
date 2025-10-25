@@ -6,7 +6,7 @@ Goal: run the end-to-end lead-gen workflow with minimal manual effort so a singl
 
 - **Trigger layer:** Web form / API intake lands in Supabase `briefing_requests` (CLI can fall back to CSV locally).  
 - **Orchestration:** Lightweight scheduler (GitHub Actions or cron) calls Python workflow; migrate to Prefect/Temporal once volume >10 companies/week.  
-- **Data gathering:** Python scripts use requests/BeautifulSoup/APIs to fetch company info, filings, reviews, news. Results stored in structured JSON per schema.
+- **Data gathering:** Python scripts use requests/BeautifulSoup/APIs to fetch company info, filings, reviews, news. Results stored in structured JSON per schema. Portal uploads (screenshots, PDFs) sync automatically into `data/raw/{slug}/attachments` so manual research files ride along with each run.
 - **Contact enrichment:** Automation drafts primary contact suggestions (leadership names + guessed emails) and flags them for manual confirmation before outreach.
 - **LLM runner:** Script calls OpenAI (or self-hosted model) with `prompt_v1`, generating `summary.md` (teaser), `full.md` (comprehensive), and snapshot markdown. Handles retries, temperature, and automatic “data gap” tags.  
 - **Storage:** Repo folder structure per `docs/data_storage_standards.md` plus Supabase `public.reports` + storage bucket for HTML/PDF assets. Consider S3/Blob storage if you outgrow Supabase.  

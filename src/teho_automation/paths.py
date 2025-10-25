@@ -31,6 +31,9 @@ class CompanyPaths:
     def qa_log(self) -> Path:
         return self.base_dir / "logs" / "qa" / f"{self.slug}.md"
 
+    @property
+    def attachments_dir(self) -> Path:
+        return self.raw_dir / "attachments"
 
 def get_company_paths(slug: str, base_dir: Path | None = None) -> CompanyPaths:
     """Return helpful Path objects for a given company slug."""
