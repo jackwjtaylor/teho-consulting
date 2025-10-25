@@ -240,3 +240,92 @@ create policy "automation staff insert"
 Automation requests created via `/admin` insert `{action: 'generate-summary', client_slug: 'gousto', payload: {...}}` with `status = requested`. The `teho automation-worker` command polls this table, processes each entry, updates `status` (`in_progress`, `succeeded`, `failed`), and uses the `payload` blob for extra context (report depth, manual overrides, etc.).
 
 Once complete, the reports catalogue is locked down to the intended client, while automation retains full write access via the service key.
+
+## 10. Briefing Notes (research/QA timeline)
+
+Capture manual research notes or reminders per request so the entire team can see context without digging through chat logs.
+
+```sql
+create table if not exists public.briefing_notes (
+  id uuid primary key default uuid_generate_v4(),
+  request_id uuid references public.briefing_requests(id) on delete cascade,
+  note text not null,
+  created_by text,
+  created_at timestamptz default now()
+);
+
+alter table public.briefing_notes enable row level security;
+
+drop policy if exists "notes service" on public.briefing_notes;
+drop policy if exists "notes staff insert" on public.briefing_notes;
+drop policy if exists "notes staff select" on public.briefing_notes;
+
+create policy "notes service"
+  on public.briefing_notes
+  for all
+  to service_role
+  using (true)
+  with check (true);
+
+create policy "notes staff select"
+  on public.briefing_notes
+  for select
+  to authenticated
+  using (auth.email() = any (array['jack@teho.ai', 'jackwjtaylor@gmail.com']));
+
+create policy "notes staff insert"
+  on public.briefing_notes
+  for insert
+  to authenticated
+  with check (auth.email() = any (array['jack@teho.ai', 'jackwjtaylor@gmail.com']));
+```
+
+## 11. QA Reviews
+
+Track checklist completion per `client_slug` so `/admin` can show “QA ready” badges and log reviewer details.
+
+```sql
+create table if not exists public.qa_reviews (
+  id uuid primary key default uuid_generate_v4(),
+  client_slug text not null,
+  status text not null default 'in_progress',
+  checklist jsonb not null default '{}'::jsonb,
+  reviewer_email text,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+alter table public.qa_reviews enable row level security;
+
+drop policy if exists "qa service" on public.qa_reviews;
+drop policy if exists "qa staff select" on public.qa_reviews;
+drop policy if exists "qa staff upsert" on public.qa_reviews;
+
+create policy "qa service"
+  on public.qa_reviews
+  for all
+  to service_role
+  using (true)
+  with check (true);
+
+create policy "qa staff select"
+  on public.qa_reviews
+  for select
+  to authenticated
+  using (auth.email() = any (array['jack@teho.ai', 'jackwjtaylor@gmail.com']));
+
+create policy "qa staff insert"
+  on public.qa_reviews
+  for insert
+  to authenticated
+  with check (auth.email() = any (array['jack@teho.ai', 'jackwjtaylor@gmail.com']));
+
+create policy "qa staff update"
+  on public.qa_reviews
+  for update
+  to authenticated
+  using (auth.email() = any (array['jack@teho.ai', 'jackwjtaylor@gmail.com']))
+  with check (auth.email() = any (array['jack@teho.ai', 'jackwjtaylor@gmail.com']));
+```
+
+The portal writes checklist data as JSON (`{ "context_ready": true, ... }`) and flips `status` to `approved` when all boxes are ticked.

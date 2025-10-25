@@ -9,6 +9,8 @@
 - [x] Update automation runbooks (data collection, QA, packaging) with portal/publishing steps.
 - [x] Portal `/admin` can log automation requests (generate/package/process) via `automation_runs`.
 - [x] Python automation worker consumes `automation_runs`, executes CLI actions, and writes back status/results.
+- [x] Wire Postmark outreach composer into `/admin` so sends + `outreach_events` logging happen without the CLI.
+- [ ] Register Postmark (or an alternative transactional provider) once a custom-domain email is ready; current signup blocks Gmail accounts.
 
 ## Lined up next
 
