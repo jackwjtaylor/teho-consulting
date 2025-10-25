@@ -13,4 +13,4 @@ We are testing the report workflow with three UK firms that have plenty of publi
 1. Run the `data_inputs_checklist.md` steps to collect the core facts and sources.  
 2. Fill in the prompt variables and create both the executive and comprehensive reports.  
 3. Review the output by hand, flag issues, and tweak the prompt or data list if needed.  
-4. Track outreach results once the reports go out (opens, replies, meetings booked).***
+4. Track outreach results once the reports go out (opens, replies, meetings booked).

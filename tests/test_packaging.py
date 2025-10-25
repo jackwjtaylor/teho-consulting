@@ -1,11 +1,16 @@
 from pathlib import Path
 
 from teho_automation.context import CompanyContext
-from teho_automation.packaging import build_email_draft, package_snapshot, render_snapshot_html
+from teho_automation.packaging import build_email_draft, package_snapshot, render_markdown_html
 
 
-def test_render_snapshot_html_wraps_markdown() -> None:
-    html = render_snapshot_html("# Title", "Demo Report")
+def test_render_markdown_html_wraps_markdown() -> None:
+    html = render_markdown_html(
+        "# Title",
+        "Demo Report",
+        {"Date": "2025-01-01", "Analyst": "Teho"},
+        "Demo Co",
+    )
     assert "<h1>Title</h1>" in html
     assert "Demo Report" in html
 

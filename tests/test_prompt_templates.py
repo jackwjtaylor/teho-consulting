@@ -4,20 +4,24 @@ import pytest
 
 from teho_automation.context import CompanyContext
 from teho_automation.prompt_runner import validate_report_structure
-from teho_automation.prompt_templates import build_prompt, load_prompt_template
+from teho_automation.prompt_templates import build_prompt, load_prompt_templates
 
 
-def test_load_prompt_template_extracts_code_block(tmp_path: Path) -> None:
+def test_load_prompt_templates_extract_code_blocks(tmp_path: Path) -> None:
     content = """# Title
 
-````markdown
+```executive
 Hello {BUSINESS_NAME}
-````
+```
+```comprehensive
+Bye {BUSINESS_NAME}
+```
 """
     template_path = tmp_path / "template.md"
     template_path.write_text(content, encoding="utf-8")
-    template = load_prompt_template(template_path)
-    assert template.strip() == "Hello {BUSINESS_NAME}"
+    templates = load_prompt_templates(template_path)
+    assert templates["executive"].strip() == "Hello {BUSINESS_NAME}"
+    assert templates["comprehensive"].strip() == "Bye {BUSINESS_NAME}"
 
 
 def test_build_prompt_inserts_context_fields() -> None:

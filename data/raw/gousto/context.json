@@ -1,0 +1,80 @@
+{
+  "business_name": "Gousto (SCA Investments Limited)",
+  "business_url": "https://www.gousto.co.uk",
+  "headquarters": "Shepherd's Bush, London, England",
+  "industry_tags": ["Meal kits", "Direct-to-consumer", "Food logistics", "Subscription commerce"],
+  "revenue_band": "£300m–£350m (FY2024 accounts – medium confidence)",
+  "headcount_info": "c.1,600 employees across London HQ and fulfilment sites (LinkedIn Oct 2025)",
+  "founding_year": "2012",
+  "ownership_model": "Venture-backed private company (Perwyn, SoftBank Vision Fund, Fidelity)",
+  "product_summary": [
+    "Subscription and one-off meal kit boxes with 200+ weekly recipes",
+    "Ambient and chilled grocery add-ons via the Gousto Market",
+    "Digital recipe discovery with personalised recommendations in-app"
+  ],
+  "mission_snippet": "\"To reinvent the evening meal\" by making home cooking more joyful, convenient, and sustainable.",
+  "courier_partners": ["DPD", "Evri", "Yodel", "Royal Mail", "Gousto-managed fleet pilots"],
+  "go_to_market_notes": [
+    "Direct-to-consumer website and mobile app with weekly meal plan selection",
+    "Free delivery for subscription plans; pay-per-box for on-demand customers",
+    "Heavy reliance on referral codes, introductory offers, and influencer partnerships"
+  ],
+  "operating_model_insights": [
+    "Four automated fulfilment centres (Warrington, Thurrock, North Lincolnshire, Staffordshire) picking 8 million meals a month",
+    "Factory API orchestrates recipe builds and real-time inventory routing",
+    "Customer service split between UK-based teams and outsourced partners handling refunds, substitutions, and late deliveries"
+  ],
+  "pain_point_indicators": [
+    "Trustpilot reviews frequently cite delayed courier drops, missing ingredients, and produce quality issues (Sept–Oct 2025 scan)",
+    "Refund credits and make-good vouchers materially impact margin (estimated £16m FY2024, internal benchmarks)",
+    "Menu complexity (200 recipes per week) drives planning pressure on procurement and packaging lines"
+  ],
+  "tech_stack_notes": [
+    "In-house Factory API and orchestration layer written in Python/Go, underpinned by AWS",
+    "Data platform built on Snowflake and dbt, surfaced through Looker and Mode dashboards",
+    "Customer engagement via Braze, Iterable, and Segment; support handled in Zendesk with macros"
+  ],
+  "data_assets": [
+    "Recipe-level demand, waste, and substitution logs per site",
+    "Customer order history, meal ratings, pause/resume behaviour, and complaints",
+    "Courier telemetry (planned vs actual delivery, exception codes, temperature breaches)"
+  ],
+  "regulatory_notes": [
+    "UK Food Standards Agency HACCP requirements for chilled goods",
+    "DEFRA plant health and allergen labelling compliance",
+    "ICO GDPR and PECR obligations for customer data and marketing consent"
+  ],
+  "recent_headlines": [
+    {
+      "title": "Gousto filings show £312m revenue and £42m adjusted EBITDA in FY2024",
+      "summary": "Latest Companies House accounts for SCA Investments Ltd highlight resilient revenue, 13% EBITDA margin, and waste held below 1%.",
+      "url": "https://find-and-update.company-information.service.gov.uk/company/08238021/filing-history",
+      "date": "2024-11-01",
+      "confidence": "medium"
+    },
+    {
+      "title": "Automation drives 140% faster throughput at Gousto Warrington site",
+      "summary": "Engineering blog explains how the Factory API and robotics stack achieved 99.97% picking accuracy and major labour savings.",
+      "url": "https://medium.com/gousto-engineering-techbrunch/inside-goustos-factory-api-simplifying-complexity-in-a-data-driven-kitchen-ad34901086de",
+      "date": "2024-06-15",
+      "confidence": "low"
+    },
+    {
+      "title": "Customer reviews flag ongoing late deliveries and damaged boxes",
+      "summary": "Trustpilot reviewers in 2025 cite courier delays, thawed ingredients, and missing items despite strong menu satisfaction.",
+      "url": "https://uk.trustpilot.com/review/gousto.co.uk",
+      "date": "2025-09-30",
+      "confidence": "medium"
+    }
+  ],
+  "competitor_list": [
+    "HelloFresh UK",
+    "Mindful Chef",
+    "SimplyCook",
+    "Oddbox",
+    "Allplants"
+  ],
+  "researcher_notes": "Validate refund credit spend and courier SLA metrics before outreach. Need hard numbers on customer-support contact volume and cost-to-serve.",
+  "primary_contact": "Timo Boldt — Founder & CEO",
+  "primary_email": "press@gousto.co.uk"
+}

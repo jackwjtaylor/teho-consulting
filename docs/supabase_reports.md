@@ -1,0 +1,198 @@
+# Supabase Reports Table & Access Control
+
+This guide secures the report catalogue that the client portal reads. Complete these steps after the `briefing_requests` setup from `docs/intake_pipeline.md`.
+
+## 1. Create/Update the `reports` Table
+
+Run the following SQL in the Supabase SQL editor. Adjust schema/extension install if needed.
+
+```sql
+create table if not exists public.reports (
+  id uuid primary key default uuid_generate_v4(),
+  client_slug text not null,
+  report_key text not null,
+  display_name text not null,
+  html_path text,
+  pdf_path text,
+  generated_at timestamptz default now(),
+  model text,
+  notes text,
+  created_at timestamptz default now()
+);
+
+create unique index if not exists reports_slug_key_idx
+  on public.reports (client_slug, report_key);
+```
+
+> The automation automatically upserts using `client_slug` + `report_key` and stores the storage paths created during `teho generate` / `teho package`.
+
+## 2. Enable Row-Level Security
+
+```sql
+alter table public.reports enable row level security;
+```
+
+## 3. Add RLS Policies
+
+Allow the automation (service key) to read/write everything, and restrict authenticated users to rows where their JWT metadata contains the matching `client_slug`. Add additional staff e-mails if you need broader access.
+
+```sql
+-- Remove existing policies if you created placeholders earlier
+drop policy if exists "reports service" on public.reports;
+drop policy if exists "reports client access" on public.reports;
+drop policy if exists "reports staff access" on public.reports;
+
+-- Automation / CLI (service role) – full access
+create policy "reports service"
+  on public.reports
+  for all
+  to service_role
+  using (true)
+  with check (true);
+
+-- Portal users – read-only, scoped to their client_slug metadata
+create policy "reports client access"
+  on public.reports
+  for select
+  to authenticated
+  using (
+    coalesce(auth.jwt() -> 'user_metadata' ->> 'client_slug', '') = client_slug
+  );
+
+-- Optional: internal staff (replace e-mails)
+create policy "reports staff access"
+  on public.reports
+  for select
+  to authenticated
+  using (auth.email() = any (array['jack@teho.ai']))
+  with check (true);
+```
+
+If staff need to edit rows manually, add an `update` policy mirroring `reports staff access`.
+
+## 4. Attach `client_slug` Metadata to Portal Users
+
+Portal sign-in uses magic links with the public anon key. To ensure users only see their own reports, add a `client_slug` claim to their auth metadata. The CLI now ships a helper command that uses the service key to update metadata:
+
+```bash
+.venv/bin/teho assign-portal-user user@example.com acme-co
+```
+
+This stores `client_slug` (and optionally `client_id`) on the Supabase auth record, so the JWT contains `user_metadata.client_slug` for RLS. Re-run the command if you need to reassign access.
+
+You can verify the metadata under **Auth → Users → (select user)** in the Supabase dashboard.
+
+## 5. Storage Bucket Permissions
+
+The automation uploads HTML/PDF files to the private `reports` storage bucket. Keep the bucket `private` and use signed URLs in the portal when presenting download links. Only the service role (automation) should have write access; the Next.js portal should request signed URLs via the authenticated Supabase client so that RLS protects the metadata lookup before storage access.
+
+## 6. Operational Checklist
+
+- [ ] Run the SQL above (table + policies).
+- [ ] Update each portal user with `teho assign-portal-user <email> <client-slug>`.
+- [ ] Confirm that the portal list view only shows entries for the linked slug.
+- [ ] Document any staff accounts added to the RLS whitelist for auditing.
+
+## 7. (Optional) Report Events Table for Portal Analytics
+
+Create a lightweight table to capture portal interactions so you can see when clients view or download their briefings. Example schema:
+
+```sql
+create table if not exists public.report_events (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid not null,
+  client_slug text not null,
+  report_id uuid,
+  report_key text not null,
+  storage_path text not null,
+  event_type text not null check (event_type in ('view', 'download')),
+  created_at timestamptz default now()
+);
+
+alter table public.report_events enable row level security;
+
+drop policy if exists "report_events service" on public.report_events;
+drop policy if exists "report_events client" on public.report_events;
+
+create policy "report_events service"
+  on public.report_events
+  for all
+  to service_role
+  using (true)
+  with check (true);
+
+create policy "report_events client"
+  on public.report_events
+  for insert
+  to authenticated
+  with check (
+    coalesce(auth.jwt() -> 'user_metadata' ->> 'client_slug', '') = client_slug
+  );
+
+create policy "report_events client read"
+  on public.report_events
+  for select
+  to authenticated
+  using (
+    coalesce(auth.jwt() -> 'user_metadata' ->> 'client_slug', '') = client_slug
+  );
+
+create policy "report_events staff"
+  on public.report_events
+  for select
+  to authenticated
+  using (auth.email() = any (array['jack@teho.ai']));
+```
+
+The portal uses `POST /api/report-events` to log view/download actions before issuing a fresh signed URL. Because the policy ties `client_slug` to the JWT claim, clients can only see their own event history if you choose to expose it later.
+
+## 8. Outreach Events Table (sends/opens/clicks/replies)
+
+Record the broader communication funnel so the admin dashboard can surface outreach alongside engagement:
+
+```sql
+create table if not exists public.outreach_events (
+  id uuid primary key default uuid_generate_v4(),
+  client_slug text not null,
+  contact_email text not null,
+  event_type text not null check (event_type in ('sent', 'opened', 'clicked', 'replied')),
+  channel text not null default 'email',
+  report_key text,
+  notes text,
+  metadata jsonb,
+  created_at timestamptz default now()
+);
+
+alter table public.outreach_events enable row level security;
+
+drop policy if exists "outreach service" on public.outreach_events;
+drop policy if exists "outreach staff" on public.outreach_events;
+
+create policy "outreach service"
+  on public.outreach_events
+  for all
+  to service_role
+  using (true)
+  with check (true);
+
+create policy "outreach staff"
+  on public.outreach_events
+  for select
+  to authenticated
+  using (auth.email() = any (array['jack@teho.ai']));
+```
+
+Use the CLI helper to log events:
+
+```bash
+.venv/bin/teho log-outreach \
+  --client-slug bloom-and-wild \
+  --contact-email ceo@bloomandwild.com \
+  --event-type sent \
+  --report-key opportunity-report-summary \
+  --notes "Sent teaser email"
+```
+
+Future webhooks (Postmark/Sendgrid) can call the same endpoint or CLI to keep this table fresh.
+
+Once complete, the reports catalogue is locked down to the intended client, while automation retains full write access via the service key.

@@ -141,6 +141,46 @@ a {
   font-size: 0.95rem;
 }
 
+.card form {
+  display: grid;
+  gap: 1rem;
+}
+
+.card form label {
+  display: grid;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.card form input,
+.card form textarea,
+.card form select {
+  border-radius: 12px;
+  border: 1px solid rgba(20, 26, 17, 0.12);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  background: #fffdf7;
+  font-family: inherit;
+}
+
+.card form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+.form-checkbox input[type="checkbox"] {
+  margin-top: 0.3rem;
+}
+
 .eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.12em;

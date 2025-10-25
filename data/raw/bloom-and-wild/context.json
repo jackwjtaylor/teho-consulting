@@ -7,7 +7,7 @@
     "Flowers",
     "Gifting"
   ],
-  "revenue_band": "UNKNOWN (Data gap – confirm latest filings post-2021)",
+  "revenue_band": "FY2024 revenue £82.0m (Companies House full accounts filed 26 Nov 2024)",
   "headcount_info": "Approx. 400 employees (LinkedIn, Oct 2025)",
   "founding_year": "2013",
   "ownership_model": "Private; venture-backed (investors include General Catalyst, Index Ventures)",
@@ -17,7 +17,16 @@
     "Flower subscriptions and curated gifting hampers"
   ],
   "mission_snippet": "We’re here to help you care wildly.",
-  "courier_partners": [],
+  "courier_partners": [
+    "Royal Mail",
+    "DPD",
+    "XeroE"
+  ],
+  "financial_highlights": [
+    "FY2024 revenue £82.0m; gross profit margin 49% (up 7pp YoY).",
+    "Adjusted EBITDA £8.5m and EBITDA £6.6m in FY2024 (up from £1.8m/£0.05m in FY2023).",
+    "FY2024 operating profit £4.6m and profit after tax £6.1m, reversing FY2023 losses."
+  ],
   "go_to_market_notes": [
     "Direct-to-consumer ecommerce model via website and mobile app",
     "Subscription reminders and gifting prompts drive repeat purchases",
@@ -49,25 +58,25 @@
   ],
   "recent_headlines": [
     {
-      "title": "Bloom & Wild raises £75M Series D and reports 160% revenue growth",
-      "summary": "Series D funding fuels expansion across Europe and focuses on tech, sustainability and partnerships like Sainsbury's retail range.",
-      "url": "https://www.uktech.news/news/london-bloom-and-wild-online-flower-delivery-startup-funding-20210118",
-      "date": "2021-01-18",
-      "confidence": "medium"
+      "title": "Momentum builds as Mary Portas rallies business leaders in Westminster for a better future",
+      "summary": "Bloom & Wild joined 150+ B Corp leaders at Better Business Day 2025, backing reforms that put people and planet alongside profit.",
+      "url": "https://retailtimes.co.uk/momentum-builds-as-mary-portas-rallies-business-leaders-in-westminster-for-a-better-future/",
+      "date": "2025-06-11",
+      "confidence": "high"
     },
     {
-      "title": "Bloom & Wild acquires Dutch rival Bloomon",
-      "summary": "Acquisition expands footprint across Benelux and positions the business as Europe's largest online flower delivery provider.",
-      "url": "https://www.uktech.news/news/londons-online-florist-bloom-wild-acquires-their-dutch-rival-bloomon-20210422",
-      "date": "2021-04-22",
-      "confidence": "medium"
+      "title": "Bloom & Wild reveals insights on how to navigate the language of gift-giving in today's modern age",
+      "summary": "The brand shared research on Victorian flower meanings to help customers avoid floral faux pas and choose gifts that land well.",
+      "url": "https://retailtimes.co.uk/bloom-wild-reveals-insights-on-how-to-navigate-the-language-of-gift-giving-in-todays-modern-age/",
+      "date": "2024-03-20",
+      "confidence": "high"
     },
     {
-      "title": "Bloom & Wild secures additional £50m and acquires Bergamotte",
-      "summary": "Further funding and acquisition quadruple the French business and target £200m+ revenues.",
-      "url": "https://www.uktech.news/startups/letterbox-flower-company-bloom-wild-raises-funding",
-      "date": "2021-07-28",
-      "confidence": "medium"
+      "title": "Bloom & Wild’s exclusive insights into this year’s most anticipated flower trends",
+      "summary": "Bloom & Wild forecast hyper-colour bouquets and bold seasonal arrangements to define 2024 gifting and decor trends.",
+      "url": "https://retailtimes.co.uk/bloom-wilds-exclusive-insights-into-this-years-most-anticipated-flower-trends/",
+      "date": "2024-01-25",
+      "confidence": "high"
     }
   ],
   "competitor_list": [
@@ -76,7 +85,7 @@
     "Arena Flowers",
     "Floom"
   ],
-  "researcher_notes": "Need verified FY2024 revenue, profitability data, current press coverage and confirmed courier partner list. Validate CEO email pattern before outreach.",
+  "researcher_notes": "FY2024 financial KPIs confirmed from Companies House filing; still need refreshed press coverage and verified outreach email pattern.",
   "primary_contact": "Aron Gelbard — Co-founder & CEO",
-  "primary_email": "UNKNOWN"
+  "primary_email": "Aron@bloomandwild.com"
 }

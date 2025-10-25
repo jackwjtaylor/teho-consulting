@@ -3,28 +3,37 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict, Iterable
+from typing import Dict, Iterable, List, Optional
 
-from .context import CompanyContext
+from .context import CompanyContext, SourceEntry
 
 DEFAULT_TEMPLATE_PATH = Path("docs/prompt_v1.md")
 
 
-def load_prompt_template(path: Path | None = None) -> str:
-    """Return the raw template string inside the markdown code block."""
+def load_prompt_templates(path: Path | None = None) -> Dict[str, str]:
+    """Return a dictionary of prompt templates keyed by code block label."""
     target = path or DEFAULT_TEMPLATE_PATH
     text = Path(target).read_text(encoding="utf-8")
-    captured: list[str] = []
-    in_block = False
+    templates: Dict[str, List[str]] = {}
+    current_label: Optional[str] = None
+
     for line in text.splitlines():
-        if line.strip().startswith("````"):
-            in_block = not in_block
+        stripped = line.strip()
+        if stripped.startswith("```"):
+            label = stripped[3:].strip().lower()
+            if current_label is None:
+                current_label = label or "default"
+                templates[current_label] = []
+            else:
+                current_label = None
             continue
-        if in_block:
-            captured.append(line)
-    if not captured:
-        raise ValueError(f"No code block prompt found in {target}")
-    return "\n".join(captured)
+        if current_label is not None:
+            templates[current_label].append(line)
+
+    flattened = {label: "\n".join(lines).strip() for label, lines in templates.items() if lines}
+    if not flattened:
+        raise ValueError(f"No prompt code blocks found in {target}")
+    return flattened
 
 
 def _format_list(values: Iterable[str]) -> str:
@@ -32,7 +41,27 @@ def _format_list(values: Iterable[str]) -> str:
     return "; ".join(cleaned) if cleaned else "UNKNOWN"
 
 
-def build_prompt(template: str, context: CompanyContext, report_depth: str) -> str:
+def _format_sources(sources: Iterable[SourceEntry]) -> str:
+    items: List[str] = []
+    for source in sources:
+        title = source.title or "Untitled"
+        retrieved = source.retrieved or "unknown date"
+        confidence = source.confidence or "medium"
+        summary = source.summary or ""
+        entry = f"{source.id} – {title} (retrieved {retrieved}, confidence {confidence})"
+        if summary:
+            entry += f" — {summary}"
+        entry += f" — {source.url}"
+        items.append(entry)
+    return "\n".join(items) if items else "None provided"
+
+
+def build_prompt(
+    template: str,
+    context: CompanyContext,
+    report_depth: str,
+    sources: Optional[Iterable[SourceEntry]] = None,
+) -> str:
     """Fill the prompt template with context values."""
     data: Dict[str, str] = {
         "REPORT_DEPTH": report_depth,
@@ -61,6 +90,7 @@ def build_prompt(template: str, context: CompanyContext, report_depth: str) -> s
         "FOUNDING_YEAR": context.founding_year or "UNKNOWN",
         "PRIMARY_CONTACT": context.primary_contact or "UNKNOWN",
         "PRIMARY_EMAIL": context.primary_email or "UNKNOWN",
+        "SOURCE_LIST": _format_sources(sources or []),
     }
 
     try:

@@ -4,14 +4,14 @@ Goal: run the end-to-end lead-gen workflow with minimal manual effort so a singl
 
 ## Architecture at a Glance
 
-- **Trigger layer:** Web form / API intake lands in queue (Airtable or Supabase).  
+- **Trigger layer:** Web form / API intake lands in Supabase `briefing_requests` (CLI can fall back to CSV locally).  
 - **Orchestration:** Lightweight scheduler (GitHub Actions or cron) calls Python workflow; migrate to Prefect/Temporal once volume >10 companies/week.  
 - **Data gathering:** Python scripts use requests/BeautifulSoup/APIs to fetch company info, filings, reviews, news. Results stored in structured JSON per schema.
 - **Contact enrichment:** Automation drafts primary contact suggestions (leadership names + guessed emails) and flags them for manual confirmation before outreach.
-- **LLM runner:** Script calls OpenAI (or self-hosted model) with `prompt_v1`. Handles retries, temperature, and automatic “data gap” tags.  
-- **Storage:** Repo folder structure per `docs/data_storage_standards.md`. Consider S3/Blob storage for binary assets.  
-- **Packaging:** Script renders Markdown to PDF (Pandoc/WeasyPrint), injects branding, and creates ready-to-send email HTML.  
-- **Outreach automation:** Postmark/Sendgrid automation triggers send with personalised tokens; integrates with CRM (HubSpot/Pipedrive).  
+- **LLM runner:** Script calls OpenAI (or self-hosted model) with `prompt_v1`, generating `summary.md` (teaser), `full.md` (comprehensive), and snapshot markdown. Handles retries, temperature, and automatic “data gap” tags.  
+- **Storage:** Repo folder structure per `docs/data_storage_standards.md` plus Supabase `public.reports` + storage bucket for HTML/PDF assets. Consider S3/Blob storage if you outgrow Supabase.  
+- **Packaging:** Script renders snapshot to branded PDF, creates the teaser email, and uploads summary/full HTML/PDF to Supabase (signed URLs for portal).  
+- **Outreach automation:** Postmark/Sendgrid automation triggers send with personalised tokens (including Supabase-hosted links); integrates with CRM (HubSpot/Pipedrive).
 - **Analytics:** Webhook logs events (opens/clicks) into a central sheet or database. Dashboard built with Looker Studio or Retool.  
 - **Monitoring:** Slack/Email alerts on job failures, schema validation errors, or responses needing human follow-up.
 
@@ -23,14 +23,15 @@ Goal: run the end-to-end lead-gen workflow with minimal manual effort so a singl
 
 2. **Data enrichment job**  
    - Crawl website sections, fetch Companies House filing summaries, pull latest headlines (news API), scrape Trustpilot/Glassdoor summaries.  
-   - Tag each snippet with source ID and confidence.  
+   - Cache outputs (JSON/SQLite) with 7-day TTL and retry failed fetches with backoff.  
+   - Tag each snippet with source ID, confidence, and refresh timestamp.  
    - Run schema validator; if critical fields missing, send task to manual queue.
 
 3. **Prompt generation job**  
    - Combine `context.json` and `sources.csv`.  
-   - Generate executive, comprehensive, and snapshot Markdown.  
-   - Compare output to section list; auto-flag missing sections.  
-   - Save to `/reports`.
+   - Generate executive summary (`summary.md`), comprehensive blueprint (`full.md`), and snapshot markdown with depth-specific prompt blocks.  
+   - Compare full output to required section list; auto-flag missing sections.  
+   - Save to `/reports/{slug}` and log Supabase payload (client_slug + report_key).  
 
 4. **Automated QA pre-checks**  
    - Lint Markdown (headings, tables).  
@@ -42,15 +43,17 @@ Goal: run the end-to-end lead-gen workflow with minimal manual effort so a singl
    - Reviewer scans the summary, spot-checks high-risk sections, approves or edits.  
    - Edits logged and fed back into prompts/settings.
 
-6. **Packaging & email job**  
+6. **Packaging & publishing job**  
    - Render snapshot PDF with template (e.g. Jinja + WeasyPrint).  
-   - Merge company-specific stats into email HTML.  
-   - Upload assets to landing page (optional) or attach to CRM record.
+   - Merge quantified bullets into teaser email HTML and verify CTA links.  
+   - Upload summary/full HTML + PDF to Supabase storage and upsert `public.reports` with signed paths, model info, and `client_slug`.  
+   - Attach Supabase asset references (or signed URLs) to CRM/outreach records.  
 
 7. **Send & track job**  
    - Schedule initial email and follow-up.  
-   - Capture opens/clicks via webhook.  
-   - Auto-create tasks when replies arrive or links clicked multiple times.
+   - Confirm portal user metadata exists (`teho assign-portal-user`) so recipients can unlock reports securely.  
+   - Capture sends/opens/clicks via webhook or CLI (`teho log-outreach`) into `outreach_events`.  
+   - Auto-create tasks when replies arrive or links clicked multiple times.  
 
 8. **Feedback loop job**  
    - Weekly script compiles metrics: response rates, meetings booked, prompt issues.  
@@ -60,6 +63,7 @@ Goal: run the end-to-end lead-gen workflow with minimal manual effort so a singl
 
 - **Language:** Python 3.11 for scripts; Node optional for landing page automation.  
 - **Storage:** Git for versioned artefacts, S3 for large files, Postgres/SQLite for logs.  
+- **Caching:** SQLite/JSON store with TTL to reduce scraping/API calls; tenacity for retries.  
 - **Scheduling:** GitHub Actions + cron for MVP; Prefect Cloud or Temporal for scale.  
 - **Validation:** Pydantic for schema, pytest for unit tests on scrapers.  
 - **PDF/Email:** Pandoc/WeasyPrint for PDF, Resend/Postmark for transactional email.  
@@ -83,10 +87,12 @@ Goal: run the end-to-end lead-gen workflow with minimal manual effort so a singl
 
 ## Next Build Tasks
 
+- [ ] Layer caching + retries across collectors (JSON/SQLite TTL 7 days, tenacity, asyncio).  
+- [ ] Integrate Companies House API for financials/ownership and evaluate headline/news APIs.  
+- [ ] Add contact enrichment helper (pattern detection + Hunter/Clearbit integration with confidence scoring).  
 - [ ] Create QA summary generator (auto highlights assumptions, missing fields).  
 - [ ] Automate PDF/email packaging and integrate with send service.  
 - [ ] Wire landing page + gated access workflow.  
 - [ ] Set up tracking dashboard + alerting.  
 - [ ] Document recovery steps for failed jobs.  
-- [ ] Add contact enrichment helper (pattern detection + manual confirmation flow).  
 - [ ] Implement optional filings/job-posting scrapers for deeper insight.

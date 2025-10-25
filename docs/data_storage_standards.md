@@ -12,8 +12,8 @@ data/
       attachments/            # cached HTML, PDFs if allowed
 reports/
   {company_slug}/
-    executive.md
-    comprehensive.md
+    summary.md
+    full.md
     snapshot.md
     snapshot.pdf
 logs/
@@ -28,7 +28,7 @@ Use lowercase slugified company names (e.g. `gousto`, `bloom-and-wild`). Keep su
 ## File Naming Rules
 
 - Dates use ISO format: `2025-10-07`.  
-- Include version suffixes when iterating (`executive_v2.md`). Keep latest version without suffix once approved.  
+- Include version suffixes when iterating (`full_v2.md`). Keep latest version without suffix once approved.  
 - Source IDs follow `S1`, `S2`, etc., matching the source catalogue.
 
 ## Company Basics to Capture

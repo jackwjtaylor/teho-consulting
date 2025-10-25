@@ -22,7 +22,7 @@
         <div class="container" style="max-width: 640px;">
           <h1>Request your AI opportunity briefing</h1>
           <p class="section__lead">Tell us who you want to influence. You’ll get the opportunity snapshot for free. Want the full briefing? We’ll confirm pricing (typically £300–£500) and timing before delivery.</p>
-          <form class="card" method="post" action="#" data-teho-form data-endpoint="">
+          <form class="card" method="post" action="#" data-teho-form data-endpoint="" data-supabase-url="" data-supabase-key="" data-supabase-table="briefing_requests">
             <label>Full name
               <input type="text" name="name" required placeholder="Alex Taylor" />
             </label>
@@ -31,6 +31,9 @@
             </label>
             <label>Target company
               <input type="text" name="company" required placeholder="Bloom &amp; Wild" />
+            </label>
+            <label>Company domain
+              <input type="text" name="domain" required placeholder="bloomandwild.com" />
             </label>
             <label>Primary persona
               <select name="persona" required>
@@ -45,9 +48,11 @@
             <label>Objective (optional)
               <textarea name="objective" placeholder="Open door for a strategic conversation, prep for a board update, etc."></textarea>
             </label>
-            <label style="display:flex;align-items:center;gap:0.6rem;font-size:0.95rem;">
-              <input type="checkbox" name="consent" required />
-              I agree to receive communications from Teho Consulting.
+            <label>Consent
+              <div class="form-checkbox">
+                <input type="checkbox" name="consent" required />
+                <span>I agree to receive communications from Teho Consulting.</span>
+              </div>
             </label>
             <button class="btn btn--primary" type="submit">Submit request</button>
           </form>
@@ -64,6 +69,12 @@
       </section>
     </main>
 
-    <script src="assets/form.js"></script>
+    <script src="../config.js?v=20251021"></script>
+    <script>
+      if (!window.TEHO_SUPABASE_URL || !window.TEHO_SUPABASE_KEY) {
+        console.warn('Supabase config missing. Ensure landing/config.js is populated.');
+      }
+    </script>
+    <script src="assets/form.js?v=20251021"></script>
   </body>
 </html>

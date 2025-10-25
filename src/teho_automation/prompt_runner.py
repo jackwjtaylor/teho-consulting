@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
+import re
 from typing import Iterable, List, Optional
 
 try:
@@ -12,13 +13,13 @@ except ImportError:  # pragma: no cover - optional dependency
     OpenAI = None  # type: ignore
 
 REQUIRED_HEADINGS = [
-    "## Company & Process Overview",
-    "## Pain-Point Scan",
-    "## Opportunity Table",
-    "## Top Five Opportunity Deep Dives",
-    "## Competitor & Industry View",
-    "## Recommendations & Timeline",
-    "## Appendix",
+    "Company & Process Overview",
+    "Pain-Point Scan",
+    "Opportunity Table",
+    "Top Five Opportunity Deep Dives",
+    "Competitor & Industry View",
+    "Recommendations & Timeline",
+    "Appendix",
 ]
 
 
@@ -26,8 +27,10 @@ def validate_report_structure(markdown: str) -> List[str]:
     """Return missing headings that should appear in the report."""
     missing = []
     for heading in REQUIRED_HEADINGS:
-        if heading not in markdown:
-            missing.append(heading)
+        escaped = re.escape(heading)
+        pattern = rf"^##\s*(?:\d+\.\s*)?{escaped}"
+        if re.search(pattern, markdown, flags=re.IGNORECASE | re.MULTILINE) is None:
+            missing.append(f"## {heading}")
     return missing
 
 
@@ -65,6 +68,11 @@ class PromptRunner:
 
 def _extract_response_text(response: object) -> str:
     """Extract text from OpenAI responses API."""
+    output_text = getattr(response, "output_text", None)
+    if output_text:
+        text = str(output_text).strip()
+        if text:
+            return text
     # response output schema reference: https://platform.openai.com/docs/api-reference/responses/object
     if hasattr(response, "output"):
         chunks: Iterable[object] = getattr(response, "output")

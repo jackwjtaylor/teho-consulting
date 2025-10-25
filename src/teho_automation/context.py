@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import datetime as dt
+import csv
+from pathlib import Path
 from typing import List, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, ValidationError
@@ -84,10 +86,36 @@ class CompanyContext(BaseModel):
 def load_context(path: str) -> CompanyContext:
     """Load a context JSON file and validate against CompanyContext."""
     import json
-    from pathlib import Path
 
     raw = json.loads(Path(path).read_text(encoding="utf-8"))
     try:
         return CompanyContext.model_validate(raw)
     except ValidationError as exc:
         raise ValueError(f"Context validation failed for {path}") from exc
+
+
+def load_sources(path: str) -> List[SourceEntry]:
+    """Load sources from CSV (id,title,url,retrieved,summary,confidence)."""
+    file_path = Path(path)
+    if not file_path.exists():
+        return []
+
+    entries: List[SourceEntry] = []
+    with file_path.open("r", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        for row in reader:
+            if not row:
+                continue
+            try:
+                entry = SourceEntry(
+                    id=row.get("id", "").strip(),
+                    title=row.get("title", "").strip(),
+                    url=row.get("url", "").strip(),
+                    retrieved=row.get("retrieved", "").strip(),
+                    summary=(row.get("summary") or "").strip() or None,
+                    confidence=(row.get("confidence") or "medium").strip(),
+                )
+            except ValidationError:
+                continue
+            entries.append(entry)
+    return entries

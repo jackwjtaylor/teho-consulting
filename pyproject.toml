@@ -19,7 +19,8 @@ dependencies = [
     "rich>=13.7.0",
     "typer>=0.12.3",
     "tenacity>=8.3.0",
-    "openai>=1.51.0"
+    "openai>=1.51.0",
+    "supabase>=2.4.0"
 ]
 
 [project.optional-dependencies]
