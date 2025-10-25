@@ -329,3 +329,55 @@ create policy "qa staff update"
 ```
 
 The portal writes checklist data as JSON (`{ "context_ready": true, ... }`) and flips `status` to `approved` when all boxes are ticked.
+
+## 12. Research Attachments
+
+Uploads dropped into `/admin` need a storage bucket plus metadata table so the worker can find files before prompting.
+
+1. Create a private storage bucket (name can be changed via `ATTACHMENTS_BUCKET` env):
+
+```sql
+select storage.create_bucket('briefing-uploads', public := false);
+```
+
+2. Table + policies:
+
+```sql
+create table if not exists public.briefing_attachments (
+  id uuid primary key default uuid_generate_v4(),
+  request_id uuid references public.briefing_requests(id) on delete cascade,
+  file_name text not null,
+  storage_path text not null,
+  mime_type text,
+  size_bytes integer,
+  uploaded_by text,
+  created_at timestamptz default now()
+);
+
+alter table public.briefing_attachments enable row level security;
+
+drop policy if exists "attachments service" on public.briefing_attachments;
+drop policy if exists "attachments staff select" on public.briefing_attachments;
+drop policy if exists "attachments staff insert" on public.briefing_attachments;
+
+create policy "attachments service"
+  on public.briefing_attachments
+  for all
+  to service_role
+  using (true)
+  with check (true);
+
+create policy "attachments staff select"
+  on public.briefing_attachments
+  for select
+  to authenticated
+  using (auth.email() = any (array['jack@teho.ai', 'jackwjtaylor@gmail.com']));
+
+create policy "attachments staff insert"
+  on public.briefing_attachments
+  for insert
+  to authenticated
+  with check (auth.email() = any (array['jack@teho.ai', 'jackwjtaylor@gmail.com']));
+```
+
+With those in place, `/admin` uploads land in `briefing-uploads/<client_slug>/<timestamp>-<filename>` and the metadata is available to the CLI/worker.
