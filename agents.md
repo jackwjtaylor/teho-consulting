@@ -27,6 +27,7 @@
 - `teho process-queue --limit 1 --generate --package` – pull queued requests, initialise folders, optionally generate reports and package assets.
 - `teho assign-portal-user <email> <client-slug>` – attach client metadata to a Supabase auth user so the portal RLS works.
 - `teho log-outreach --client-slug <slug> --contact-email <email> --event-type <sent|opened|clicked|replied>` – capture outreach signals for analytics.
+- `teho automation-worker --poll 30` – consume portal automation requests (generate/package/process) and update Supabase status.
 - Automation design notes live in `docs/automation_blueprint.md` & `docs/workflow_map.md`.
 - Intake specifics & Supabase schema live in `docs/intake_pipeline.md`.
 - Internal CRM + analytics live at `/admin` in the portal (service-key powered queue + dashboard).

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import json
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -32,10 +33,12 @@ from .prompt_runner import PromptRunner, validate_report_structure
 from .prompt_templates import build_prompt, load_prompt_templates
 from .supabase_client import (
     ensure_reports_bucket,
+    fetch_automation_runs,
     fetch_requests,
     insert_briefing_request,
     log_outreach_event,
     set_portal_user_access,
+    update_automation_run,
     update_briefing_status,
     upload_report_asset,
     upsert_report_entry,
@@ -573,6 +576,39 @@ def log_outreach(
 
 
 @app.command()
+def automation_worker(
+    poll: int = typer.Option(0, help="Seconds to wait between polls (0 = run once if no work)"),
+    batch_size: int = typer.Option(3, help="Number of jobs to fetch per batch"),
+    dry_run: bool = typer.Option(False, help="Preview actions without executing them"),
+) -> None:
+    """Process automation runs created from the admin portal."""
+
+    typer.secho("Starting automation worker", fg=typer.colors.CYAN)
+    while True:
+        pending = fetch_automation_runs(["requested"], limit=batch_size)
+        if not pending.success:
+            typer.secho(f"Unable to fetch automation runs: {pending.message}", fg=typer.colors.RED)
+            if poll <= 0:
+                raise typer.Exit(code=1)
+            time.sleep(max(poll, 5))
+            continue
+
+        runs: List[Dict[str, Any]] = pending.data or []  # type: ignore[assignment]
+        if not runs:
+            if poll > 0:
+                time.sleep(poll)
+                continue
+            typer.secho("No pending automation runs.", fg=typer.colors.GREEN)
+            break
+
+        for run in runs:
+            _process_automation_run(run, dry_run=dry_run)
+
+        if poll <= 0:
+            break
+
+
+@app.command()
 def generate(
     slug: str,
     reports: List[str] = typer.Option(
@@ -705,3 +741,98 @@ def generate(
 
 if __name__ == "__main__":
     app()
+
+
+def _process_automation_run(run: Dict[str, Any], *, dry_run: bool = False) -> None:
+    run_id = run.get("id")
+    action = run.get("action") or ""
+    payload = run.get("payload") if isinstance(run.get("payload"), dict) else {}
+    client_slug = run.get("client_slug")
+
+    if not run_id:
+        typer.secho("Automation run missing ID; skipping", fg=typer.colors.RED)
+        return
+
+    merged_payload = dict(payload)
+    merged_payload["last_attempt"] = datetime.utcnow().isoformat()
+    update_automation_run(run_id, status="in_progress", payload=merged_payload)
+
+    try:
+        if dry_run:
+            message = "Dry run requested"
+        else:
+            message = _execute_automation_action(action, client_slug, payload)
+        merged_payload["last_result"] = message
+        update_automation_run(run_id, status="succeeded", payload=merged_payload)
+        typer.secho(f"Automation run {run_id} completed: {message}", fg=typer.colors.GREEN)
+    except Exception as exc:
+        merged_payload["last_error"] = str(exc)
+        update_automation_run(run_id, status="failed", payload=merged_payload)
+        typer.secho(f"Automation run {run_id} failed: {exc}", fg=typer.colors.RED)
+
+
+def _execute_automation_action(action: str, slug: Optional[str], payload: Dict[str, Any]) -> str:
+    template_path = Path(payload.get("template") or "docs/prompt_v1.md")
+    model_name = payload.get("model") or "gpt-4.1-mini"
+
+    if action == "generate-summary":
+        if not slug:
+            raise ValueError("client_slug required for generate-summary")
+        generate(
+            slug=slug,
+            reports=["executive"],
+            template=template_path,
+            output_dir=None,
+            model=model_name,
+            dry_run=False,
+            upload=True,
+        )
+        return "Generated executive summary"
+
+    if action == "generate-full":
+        if not slug:
+            raise ValueError("client_slug required for generate-full")
+        generate(
+            slug=slug,
+            reports=["comprehensive"],
+            template=template_path,
+            output_dir=None,
+            model=model_name,
+            dry_run=False,
+            upload=True,
+        )
+        return "Generated full report"
+
+    if action == "package-snapshot":
+        if not slug:
+            raise ValueError("client_slug required for package-snapshot")
+        snapshot_template = payload.get("snapshot") or "reports/{slug}/snapshot.md"
+        package(
+            slug=slug,
+            snapshot=Path(str(snapshot_template).format(slug=slug)),
+            output_dir=None,
+            no_pdf=False,
+            upload=True,
+        )
+        return "Packaged snapshot"
+
+    if action == "process-queue":
+        limit = int(payload.get("limit") or 1)
+        status = payload.get("status") or "queued"
+        generate_flag = bool(payload.get("generate", True))
+        package_flag = bool(payload.get("package", True))
+        try:
+            process_queue(
+                limit=limit,
+                status=status,
+                generate=generate_flag,
+                package=package_flag,
+                model=model_name,
+                template=template_path,
+                dry_run=False,
+            )
+        except typer.Exit:
+            pass  # process_queue uses typer.Exit when no work remains
+        return "Processed queue"
+
+    raise ValueError(f"Unsupported automation action: {action}")

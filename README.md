@@ -28,6 +28,11 @@ Teho Consulting is building simple AI-led services for UK businesses. Our first 
   ```bash
   .venv/bin/teho log-outreach --client-slug <slug> --contact-email <email> --event-type sent
   ```
+- Run the automation worker (process portal-triggered jobs):
+  ```bash
+  .venv/bin/teho automation-worker --poll 30
+  ```
+- Jobs inserted via `/admin` show up in `automation_runs`; the worker flips them to `in_progress` and eventually `succeeded`/`failed`, with the latest log stored in the `payload` column for visibility inside the portal.
 - This produces `reports/<slug>/summary.*` for the executive teaser and `reports/<slug>/full.*` for the comprehensive briefing, alongside the packaged HTML/PDF/email assets.
 - By default the CLI now creates/uses a Supabase Storage bucket called `reports` and uploads the generated Markdown, branded HTML, PDF (if WeasyPrint is installed), and email draft. Use `--no-upload` on either command to skip this step.
 - To (re)create the storage bucket manually run:

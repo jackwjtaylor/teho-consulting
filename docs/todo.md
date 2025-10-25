@@ -7,6 +7,8 @@
 - [x] Document how portal users get mapped to `client_slug` (admin workflow + Supabase metadata) and automate the sync.  
 - [x] Polish portal UI (list view, buttons, inline viewer) to mirror the refreshed report styling.  
 - [x] Update automation runbooks (data collection, QA, packaging) with portal/publishing steps.
+- [x] Portal `/admin` can log automation requests (generate/package/process) via `automation_runs`.
+- [x] Python automation worker consumes `automation_runs`, executes CLI actions, and writes back status/results.
 
 ## Lined up next
 

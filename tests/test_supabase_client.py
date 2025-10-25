@@ -129,3 +129,55 @@ def test_log_outreach_event_inserts(monkeypatch):
     assert captured["table"] == "outreach_events"
     assert captured["data"]["client_slug"] == "acme"
     assert captured["data"]["notes"] == "first touch"
+
+
+def test_fetch_automation_runs_without_env(monkeypatch):
+    monkeypatch.delenv("SUPABASE_URL", raising=False)
+    monkeypatch.delenv("SUPABASE_SERVICE_KEY", raising=False)
+    monkeypatch.setenv("DOTENV_PATH", "/dev/null")
+
+    result = supabase_client.fetch_automation_runs(["requested"], limit=5)
+    assert result.success is False
+    assert "Supabase not configured" in result.message or result.message == ""
+
+
+def test_update_automation_run_calls_supabase(monkeypatch):
+    captured = {}
+
+    class DummyQuery:
+        def __init__(self):
+            captured["executed"] = False
+
+        def eq(self, column, value):
+            captured["eq"] = (column, value)
+            return self
+
+        def execute(self):
+            captured["executed"] = True
+            return SimpleNamespace(data={"id": "run-1"})
+
+    class DummyTable:
+        def update(self, patch):
+            captured["patch"] = patch
+            return DummyQuery()
+
+    class DummyClient:
+        def table(self, name):
+            captured["table"] = name
+            return DummyTable()
+
+    monkeypatch.setattr(supabase_client, "_build_client", lambda: DummyClient())
+
+    result = supabase_client.update_automation_run(
+        "run-1",
+        status="in_progress",
+        payload={"attempts": 1},
+    )
+
+    assert result.success is True
+    assert captured["table"] == "automation_runs"
+    assert captured["eq"] == ("id", "run-1")
+    assert captured["patch"]["status"] == "in_progress"
+    assert captured["patch"]["payload"]["attempts"] == 1
+    assert "updated_at" in captured["patch"]
+    assert captured["executed"] is True

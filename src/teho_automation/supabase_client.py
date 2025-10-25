@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import mimetypes
 import requests
@@ -269,5 +270,49 @@ def log_outreach_event(payload: Dict[str, Any]) -> SupabaseResult:
     try:
         response = client.table("outreach_events").insert(data).execute()
         return SupabaseResult(success=True, data=response.data or {}, message="Outreach logged")
+    except Exception as exc:  # pragma: no cover
+        return SupabaseResult(success=False, message=str(exc))
+
+
+def fetch_automation_runs(statuses: List[str], limit: int = 10) -> SupabaseResult:
+    client = _build_client()
+    if client is None:
+        return SupabaseResult(success=False, message="Supabase not configured")
+
+    try:
+        query = (
+            client.table("automation_runs")
+            .select("id, client_slug, action, status, payload, triggered_by, created_at")
+            .order("created_at", desc=False)
+        )
+        if statuses:
+            query = query.in_("status", statuses)
+        if limit:
+            query = query.limit(limit)
+        response = query.execute()
+        return SupabaseResult(success=True, data=response.data or [], message="Fetched")
+    except Exception as exc:  # pragma: no cover
+        return SupabaseResult(success=False, message=str(exc))
+
+
+def update_automation_run(
+    run_id: str,
+    *,
+    status: Optional[str] = None,
+    payload: Optional[Dict[str, Any]] = None,
+) -> SupabaseResult:
+    client = _build_client()
+    if client is None:
+        return SupabaseResult(success=False, message="Supabase not configured")
+
+    patch: Dict[str, Any] = {"updated_at": datetime.utcnow().isoformat()}
+    if status:
+        patch["status"] = status
+    if payload is not None:
+        patch["payload"] = payload
+
+    try:
+        response = client.table("automation_runs").update(patch).eq("id", run_id).execute()
+        return SupabaseResult(success=True, data=response.data or {}, message="Updated")
     except Exception as exc:  # pragma: no cover
         return SupabaseResult(success=False, message=str(exc))

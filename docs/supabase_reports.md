@@ -195,4 +195,48 @@ Use the CLI helper to log events:
 
 Future webhooks (Postmark/Sendgrid) can call the same endpoint or CLI to keep this table fresh.
 
+## 9. Automation Runs Table (portal-triggered jobs)
+
+The admin portal now records automation requests (generate/package/process) so the Python runner can pick them up. Create the table and policies:
+
+```sql
+create table if not exists public.automation_runs (
+  id uuid primary key default uuid_generate_v4(),
+  client_slug text,
+  action text not null,
+  status text not null default 'requested',
+  payload jsonb,
+  triggered_by text,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+alter table public.automation_runs enable row level security;
+
+drop policy if exists "automation service" on public.automation_runs;
+drop policy if exists "automation staff select" on public.automation_runs;
+drop policy if exists "automation staff insert" on public.automation_runs;
+
+create policy "automation service"
+  on public.automation_runs
+  for all
+  to service_role
+  using (true)
+  with check (true);
+
+create policy "automation staff select"
+  on public.automation_runs
+  for select
+  to authenticated
+  using (auth.email() = any (array['jack@teho.ai', 'jackwjtaylor@gmail.com']));
+
+create policy "automation staff insert"
+  on public.automation_runs
+  for insert
+  to authenticated
+  with check (auth.email() = any (array['jack@teho.ai', 'jackwjtaylor@gmail.com']));
+```
+
+Automation requests created via `/admin` insert `{action: 'generate-summary', client_slug: 'gousto', payload: {...}}` with `status = requested`. The `teho automation-worker` command polls this table, processes each entry, updates `status` (`in_progress`, `succeeded`, `failed`), and uses the `payload` blob for extra context (report depth, manual overrides, etc.).
+
 Once complete, the reports catalogue is locked down to the intended client, while automation retains full write access via the service key.

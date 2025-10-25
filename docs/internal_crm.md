@@ -24,6 +24,7 @@ The briefing queue and analytics now live inside the Next.js portal at `/admin`.
 
 - **Add a company** – Form mirrors `teho queue-request`: enter company name, domain, persona, contacts, and optional notes. Submissions land in `briefing_requests` with `status = queued`.  
 - **Filter & update status** – Use the status dropdown at the top-right to filter the queue. Each row includes a status select + save button that writes back to Supabase immediately. Automation (`teho process-queue`) watches the same table.  
+- **Request automation runs** – Buttons in the queue and dedicated Automation card create entries in `public.automation_runs` (e.g., “generate summary”, “package snapshot”, “process queue”). The `teho automation-worker` command now polls this table continuously, flips jobs to `in_progress`, and records `succeeded` / `failed` along with the latest result/error payload so operators see the outcome inside `/admin`.  
 - **Pipeline lenses** – “Active pipeline”, “Needs QA”, and “Ready to send” cards surface the current workload based on `briefing_requests.status`.  
 - **Engagement metrics** – Overview cards plus “Latest report interactions” and “Outreach signals” read from `report_events` and `outreach_events`. Anything logged via `teho log-outreach` or the portal download/view buttons will appear here.  
 - **Client health** – The account health card aggregates report counts, last send date, and view/download tallies per `client_slug` to help prioritise follow-ups.
