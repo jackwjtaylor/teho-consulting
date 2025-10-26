@@ -15,6 +15,7 @@
 - [x] Add attachment uploads per request (Supabase bucket + portal UI) so research artifacts live alongside the queue.
 - [x] Add follow-up radar + manual outreach logging so `/admin` covers the outreach funnel.
 - [x] Add direct automation API routes + buttons so `/admin` can invoke the CLI immediately (configure `TEHO_CLI_PATH`).
+- [x] Add portal access manager (list Supabase auth users + assign client slugs/roles).
 
 ## Lined up next
 
