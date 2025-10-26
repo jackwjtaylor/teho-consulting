@@ -10,7 +10,7 @@
 - [x] Portal `/admin` can log automation requests (generate/package/process) via `automation_runs`.
 - [x] Python automation worker consumes `automation_runs`, executes CLI actions, and writes back status/results.
 - [x] Wire Postmark outreach composer into `/admin` so sends + `outreach_events` logging happen without the CLI.
-- [ ] Register Postmark (or an alternative transactional provider) once a custom-domain email is ready; current signup blocks Gmail accounts.
+- [x] Register Postmark (or an alternative transactional provider) once a custom-domain email is ready; current signup blocks Gmail accounts.
 - [x] Surface report assets (signed links + overrides) inside `/admin` so packaging can be handled from the portal.
 - [x] Add attachment uploads per request (Supabase bucket + portal UI) so research artifacts live alongside the queue.
 - [x] Add follow-up radar + manual outreach logging so `/admin` covers the outreach funnel.
@@ -19,7 +19,7 @@
 
 ## Lined up next
 
-- [ ] Implement caching + retry layer for collectors (JSON/SQLite TTL 7 days, tenacity retries, asyncio parallelism).  
+- [x] Implement caching + retry layer for collectors (JSON/SQLite TTL 7 days, tenacity retries, asyncio parallelism).  
 - [ ] Integrate Companies House API (filings, revenue, ownership) and evaluate News/headline APIs; wire results into context schema.  
 - [ ] Add contact enrichment workflow (email pattern heuristics + first API provider such as Hunter/Clearbit) with confidence flags in `context.json`.  
 - [ ] Create a GitHub Action/cron job to run `teho process-queue` (document secrets setup).  
