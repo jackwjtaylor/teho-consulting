@@ -13,6 +13,7 @@
 - [ ] Register Postmark (or an alternative transactional provider) once a custom-domain email is ready; current signup blocks Gmail accounts.
 - [x] Surface report assets (signed links + overrides) inside `/admin` so packaging can be handled from the portal.
 - [x] Add attachment uploads per request (Supabase bucket + portal UI) so research artifacts live alongside the queue.
+- [x] Add follow-up radar + manual outreach logging so `/admin` covers the outreach funnel.
 
 ## Lined up next
 
