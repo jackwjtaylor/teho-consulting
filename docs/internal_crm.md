@@ -46,3 +46,12 @@ The briefing queue and analytics now live inside the Next.js portal at `/admin`.
 - If you prefer to keep `/admin` behind authentication, add an allowlist check before rendering (e.g., verify Supabase session email) or wrap the route with middleware.  
 - Continue using `teho assign-portal-user` to control what clients see on `/dashboard`; staff access to `/admin` no longer depends on that metadata.  
 - When adding more team members, share the `/admin` URL privately and rotate the service key if you suspect it leaked.
+
+## 5. End-to-End Workflow (MVP)
+
+1. **Pipeline tab** – Add or update companies, review the queue (use delete for mistakes), and trigger collectors/generation via the automation cards.  
+2. **Outreach tab** – Send the snapshot email via Postmark, adjust follow-up windows, and log replies/meetings.  
+3. **Assets & Access tab** – Override report assets and assign/revoke client access without the CLI.  
+4. **Analytics tab** – Monitor funnel counts, account health, and outreach signals to decide what to do next.  
+
+Work through the tabs left‑to‑right when processing a request end to end.
