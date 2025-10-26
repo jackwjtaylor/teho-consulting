@@ -14,6 +14,7 @@
 - [x] Surface report assets (signed links + overrides) inside `/admin` so packaging can be handled from the portal.
 - [x] Add attachment uploads per request (Supabase bucket + portal UI) so research artifacts live alongside the queue.
 - [x] Add follow-up radar + manual outreach logging so `/admin` covers the outreach funnel.
+- [x] Add direct automation API routes + buttons so `/admin` can invoke the CLI immediately (configure `TEHO_CLI_PATH`).
 
 ## Lined up next
 

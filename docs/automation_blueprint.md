@@ -13,6 +13,7 @@ Goal: run the end-to-end lead-gen workflow with minimal manual effort so a singl
 - **Packaging:** Script renders snapshot to branded PDF, creates the teaser email, and uploads summary/full HTML/PDF to Supabase (signed URLs for portal).  
 - **Outreach automation:** Postmark/Sendgrid automation triggers send with personalised tokens (including Supabase-hosted links); integrates with CRM (HubSpot/Pipedrive).
 - **Worker service:** `teho automation-worker` polls `automation_runs`, executes CLI actions (generate/package/process), and marks each job `in_progress` → `succeeded/failed` in Supabase so `/admin` reflects the latest result.
+- **Direct triggers:** `/admin` exposes `/api/automation/run-process-queue` and `/api/automation/generate-report` endpoints that spawn the CLI immediately for one-off runs (point `TEHO_CLI_PATH`/`TEHO_AUTOMATION_CWD` to your installation when deploying the portal).
 - **Analytics:** Webhook logs events (opens/clicks) into a central sheet or database. Dashboard built with Looker Studio or Retool.  
 - **Monitoring:** Slack/Email alerts on job failures, schema validation errors, or responses needing human follow-up.
 
