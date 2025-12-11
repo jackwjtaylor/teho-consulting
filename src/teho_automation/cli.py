@@ -30,7 +30,7 @@ from .packaging import (
     rewrite_markdown_intro,
 )
 from .paths import get_company_paths
-from .prompt_runner import PromptRunner, validate_report_structure
+from .agent_workflow_runner import WorkflowError, run_agent_workflow
 from .prompt_templates import build_prompt, load_prompt_templates
 from .supabase_client import (
     download_attachment_blob,
@@ -393,9 +393,6 @@ def process_queue(
         typer.secho("No requests found for the given status.", fg=typer.colors.YELLOW)
         raise typer.Exit()
 
-    template_map: Optional[dict[str, str]] = None
-    runner: Optional[PromptRunner] = None
-
     for entry in requests_data[:limit]:
         slug = entry.get("slug") or "".join(
             ch.lower() if ch.isalnum() or ch == " " else " " for ch in entry.get("company_name", "")
@@ -438,38 +435,20 @@ def process_queue(
             continue
 
         if generate:
-            if template_map is None:
-                template_map = load_prompt_templates(template)
-            if runner is None:
-                try:
-                    runner = PromptRunner(model=model)
-                except RuntimeError as exc:
-                    typer.secho(str(exc), fg=typer.colors.RED)
-                    update_briefing_status(slug, "needs_review")
-                    break
-
-            if template_map is None:
-                typer.secho("No prompt templates available.", fg=typer.colors.RED)
+            try:
+                generate(
+                    slug=slug,
+                    reports=["executive", "comprehensive"],
+                    template=template,
+                    output_dir=None,
+                    model=model,
+                    dry_run=False,
+                    upload=True,
+                )
+                update_briefing_status(slug, "needs_qa")
+            except typer.Exit:
                 update_briefing_status(slug, "needs_review")
                 break
-
-            for report in ("executive", "comprehensive"):
-                template_str = template_map.get(report) or template_map.get("default")
-                if template_str is None:
-                    typer.secho(f"No prompt template found for {report}", fg=typer.colors.RED)
-                    continue
-                prompt = build_prompt(template_str, context, report_depth=report)
-                console.print(f"Generating {report} report for [bold]{company_name}[/bold]...")
-                report_text = runner.run(prompt)
-                if report != "executive":
-                    missing = validate_report_structure(report_text)
-                    if missing:
-                        typer.secho(f"{report} report missing sections {missing}", fg=typer.colors.YELLOW)
-                output_file = paths.reports_dir / f"{report}.md"
-                output_file.write_text(report_text, encoding="utf-8")
-                typer.secho(f"Wrote {output_file}", fg=typer.colors.GREEN)
-
-            update_briefing_status(slug, "needs_qa")
 
             if package:
                 snapshot_path = paths.reports_dir / "snapshot.md"
@@ -686,7 +665,6 @@ def generate(
     target_dir = output_dir or paths.reports_dir
     target_dir.mkdir(parents=True, exist_ok=True)
 
-    runner: Optional[PromptRunner] = None
     bucket_ready = True
     if upload and not dry_run:
         bucket_result = ensure_reports_bucket()
@@ -713,21 +691,25 @@ def generate(
             console.print(prompt)
             continue
 
-        if runner is None:
-            try:
-                runner = PromptRunner(model=model)
-            except RuntimeError as exc:
-                typer.secho(str(exc), fg=typer.colors.RED)
-                raise typer.Exit(code=1) from exc
+        console.print(
+            f"Running agent-builder workflow for [bold]{context.business_name}[/bold]..."
+        )
+        workflow_input = _compose_workflow_input(context)
+        if prompt:
+            workflow_input = f"{workflow_input}\n\nContext prompt:\n{prompt}"
+        try:
+            workflow_result = run_agent_workflow(workflow_input)
+        except (WorkflowError, FileNotFoundError) as exc:
+            typer.secho(str(exc), fg=typer.colors.RED)
+            raise typer.Exit(code=1) from exc
 
-        console.print(f"Generating {report} report for [bold]{context.business_name}[/bold]...")
-        report_text = runner.run(prompt)
-        if report != "executive":
-            missing = validate_report_structure(report_text)
-            if missing:
-                typer.secho(
-                    f"Warning: report missing sections {missing}", fg=typer.colors.YELLOW
-                )
+        report_text = (
+            workflow_result.get("report", {}).get("content")
+            or workflow_result.get("report_markdown")
+        )
+        if not report_text:
+            typer.secho("Workflow returned no report markdown", fg=typer.colors.RED)
+            raise typer.Exit(code=1)
 
         definition = REPORT_DEFINITIONS.get(report, REPORT_DEFINITIONS["executive"])
         canonical = definition["canonical"]
@@ -795,6 +777,21 @@ def generate(
 
 if __name__ == "__main__":
     app()
+
+
+def _compose_workflow_input(context: CompanyContext) -> str:
+    """Create a concise seed string for the agent workflow."""
+
+    details = [f"Company: {context.business_name}"]
+    if context.business_url:
+        details.append(f"Website: {context.business_url}")
+    if context.industry_tags:
+        details.append("Industry tags: " + ", ".join(context.industry_tags))
+    if context.product_summary:
+        details.append("Products: " + "; ".join(context.product_summary))
+    if context.researcher_notes:
+        details.append(f"Researcher notes: {context.researcher_notes}")
+    return "\n".join(details)
 
 
 def _process_automation_run(run: Dict[str, Any], *, dry_run: bool = False) -> None:
