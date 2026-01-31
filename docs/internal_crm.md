@@ -13,6 +13,7 @@ The briefing queue and analytics now live inside the Next.js portal at `/admin`.
    NEXT_PUBLIC_SUPABASE_ANON_KEY=...
    ```
    The `/admin` route queries Supabase with the service key on the server, so no additional login is required. Keep the deployed site behind a trusted network or SSO if you need stronger controls.
+3. Optional enrichment: set `COMPANIES_HOUSE_API_KEY` wherever the automation CLI runs (local env or worker). When present, every “Run full job” call pulls the latest profile/filings into `data/raw/<slug>/companies_house.json`, updates `context.json`, and appends a source entry automatically.
 
 ## 2. Accessing the Dashboard
 
@@ -26,9 +27,13 @@ The briefing queue and analytics now live inside the Next.js portal at `/admin`.
 - **Briefing queue** – Edit statuses inline, and use the new delete button (with confirmation) to remove test entries or mistakes directly from `/admin`.  
 - **Workflow tabs** – `/admin` is organised into Pipeline, Outreach, Assets & Access, and Analytics so you can focus on one stage at a time.  
 - **Filter & update status** – Use the status dropdown at the top-right to filter the queue. Each row includes a status select + save button that writes back to Supabase immediately. Automation (`teho process-queue`) watches the same table.  
-- **Request automation runs** – Buttons in the queue and dedicated Automation card create entries in `public.automation_runs` (e.g., “generate summary”, “package snapshot”, “process queue”). The `teho automation-worker` command now polls this table continuously, flips jobs to `in_progress`, and records `succeeded` / `failed` along with the latest result/error payload so operators see the outcome inside `/admin`.  
-- **Direct automation triggers** – Additional buttons call `/api/automation/run-process-queue` and `/api/automation/generate-report`, which spawn the local CLI (`teho`) immediately (configure `TEHO_CLI_PATH` / `TEHO_AUTOMATION_CWD` on the portal server).  
+- **Automation panel** – Each queue row now has one primary “Run full job” button. Clicking it queues `teho run-job <slug>` which collects signals, generates the full + summary reports, packages the snapshot, uploads the outreach email draft, and (when configured) enriches the context with Companies House data in one pass. Keep `teho automation-worker --poll 30` running so the job moves from `requested` → `in_progress` → `succeeded/failed`; the latest status + log summary is shown inline. Advanced controls (generate-only, package-only) still exist behind a disclosure panel for emergency use.  
+- **Direct automation triggers** – The Automation card still exposes a “Process queue” button plus advanced CLI shortcuts. These spawn the local CLI (`teho`) immediately (configure `TEHO_CLI_PATH` / `TEHO_AUTOMATION_CWD` on the portal server).  
+- **Queue cleanup** – The Automation card now includes a “Clear completed” button so you can wipe succeeded/failed `automation_runs` rows once you’ve reviewed them. Pending jobs are untouched.  
 - **Research health & notes** – Each queue row now surfaces context gaps (missing domain/contact/email plus any `payload.missing_fields` data). Expandable panels show the latest `briefing_notes`, and you can append new notes inline without leaving the portal.  
+- **Automated research** – “Run full job” now calls OpenAI to populate `data/research/<slug>.yaml` with the partner-grade research pack before producing the board briefing. The YAML is stored for audit/editing if needed.
+- **Board-ready assets** – When a research bundle exists (`data/research/<slug>.yaml`) the automation run also generates the partner-grade board briefing; the QA asset chips link to the latest summary HTML, full PDF, board report, and email draft directly from Supabase (the UI now prefers the most recent upload automatically).  
+- **Signal enrichment** – Collector runs now gather OpenAI web-search intelligence, competitor moves, customer voice summaries, and synthesise them into the context (`MARKET_SPOTLIGHT`, `CUSTOMER_VOICE`, etc.), keeping prompts grounded before generation.
 - **Collector caching** – Automated signal gathering now caches results for 7 days and retries transient failures, reducing manual re-runs when APIs/websites hiccup.  
 - **QA checklist** – Inline form persists checklist progress into `public.qa_reviews`, highlights whether QA is “in progress” or “approved”, and records the reviewer email.  
 - **Attachments** – Upload PDFs/screenshots per request; files go into the private `briefing-uploads` bucket and metadata in `public.briefing_attachments`, so the automation worker can fetch supporting docs before prompting.  
@@ -49,9 +54,9 @@ The briefing queue and analytics now live inside the Next.js portal at `/admin`.
 
 ## 5. End-to-End Workflow (MVP)
 
-1. **Pipeline tab** – Add or update companies, review the queue (use delete for mistakes), and trigger collectors/generation via the automation cards.  
-2. **Outreach tab** – Send the snapshot email via Postmark, adjust follow-up windows, and log replies/meetings.  
-3. **Assets & Access tab** – Override report assets and assign/revoke client access without the CLI.  
-4. **Analytics tab** – Monitor funnel counts, account health, and outreach signals to decide what to do next.  
+1. **Pipeline tab** – Add or update companies, attach any research artefacts, then hit “Run full job”. Once it completes you’ll see QA links for the summary, full briefing, board pack, and email draft alongside the status chip. Companies House enrichment runs automatically when the API key is present.  
+2. **Outreach tab** – After QA, either trigger the email send (Postmark) or log manual outreach events.  
+3. **Assets & Access tab** – Override report assets, download the packaged files, or grant/revoke client portal access.  
+4. **Analytics tab** – Monitor funnel counts, engagement, and outstanding automation runs.  
 
 Work through the tabs left‑to‑right when processing a request end to end.

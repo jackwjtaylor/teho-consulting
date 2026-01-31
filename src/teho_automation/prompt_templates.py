@@ -6,6 +6,8 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
 from .context import CompanyContext, SourceEntry
+from .citations import CitationCatalog, create_citation_catalog
+from .patterns import format_patterns
 
 DEFAULT_TEMPLATE_PATH = Path("docs/prompt_v1.md")
 
@@ -41,19 +43,18 @@ def _format_list(values: Iterable[str]) -> str:
     return "; ".join(cleaned) if cleaned else "UNKNOWN"
 
 
-def _format_sources(sources: Iterable[SourceEntry]) -> str:
-    items: List[str] = []
-    for source in sources:
-        title = source.title or "Untitled"
-        retrieved = source.retrieved or "unknown date"
-        confidence = source.confidence or "medium"
-        summary = source.summary or ""
-        entry = f"{source.id} – {title} (retrieved {retrieved}, confidence {confidence})"
-        if summary:
-            entry += f" — {summary}"
-        entry += f" — {source.url}"
-        items.append(entry)
-    return "\n".join(items) if items else "None provided"
+def _format_catalog(catalog: Optional[CitationCatalog]) -> Dict[str, str]:
+    if catalog is None or not catalog.labels:
+        return {
+            "SOURCE_LIST": "No verified sources provided. Mark data gaps explicitly.",
+            "SOURCE_CATALOG": "No sources captured. Ensure sources.csv is populated.",
+            "SOURCE_IDS": "None",
+        }
+    return {
+        "SOURCE_LIST": catalog.render_catalog(),
+        "SOURCE_CATALOG": catalog.render_catalog(),
+        "SOURCE_IDS": ", ".join(catalog.labels),
+    }
 
 
 def build_prompt(
@@ -61,8 +62,13 @@ def build_prompt(
     context: CompanyContext,
     report_depth: str,
     sources: Optional[Iterable[SourceEntry]] = None,
+    citations: Optional[CitationCatalog] = None,
 ) -> str:
     """Fill the prompt template with context values."""
+    source_list = list(sources or [])
+    catalog = citations or (create_citation_catalog(source_list) if source_list else None)
+    catalog_fields = _format_catalog(catalog)
+
     data: Dict[str, str] = {
         "REPORT_DEPTH": report_depth,
         "BUSINESS_NAME": context.business_name or "UNKNOWN",
@@ -90,7 +96,14 @@ def build_prompt(
         "FOUNDING_YEAR": context.founding_year or "UNKNOWN",
         "PRIMARY_CONTACT": context.primary_contact or "UNKNOWN",
         "PRIMARY_EMAIL": context.primary_email or "UNKNOWN",
-        "SOURCE_LIST": _format_sources(sources or []),
+        "PERSONA_FOCUS": context.persona_focus or "CEO / Founder",
+        "ENGAGEMENT_GOAL": context.engagement_goal or "Secure a 45-minute follow-up session",
+        "MARKET_SPOTLIGHT": context.market_spotlight or "(Data gap)",
+        "CUSTOMER_VOICE": _format_list(context.customer_voice_highlights),
+        "COMPETITOR_SIGNALS": _format_list(context.competitor_signals),
+        "REGULATORY_WATCH": _format_list(context.regulatory_watch),
+        "PATTERN_LIBRARY": format_patterns(),
+        **catalog_fields,
     }
 
     try:

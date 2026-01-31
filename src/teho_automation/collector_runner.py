@@ -13,8 +13,10 @@ from .collectors import (
     fetch_recent_headlines,
     fetch_site_overview,
     fetch_trustpilot_reviews,
+    perform_web_search,
 )
 from .context import CompanyContext, load_context
+from .openai_tools import summarise_market_signals
 from .paths import CompanyPaths, get_company_paths
 from tenacity import retry, stop_after_attempt, wait_exponential
 
@@ -66,6 +68,8 @@ def gather_signals(
     site_fetcher: Callable[[str], Dict] = fetch_site_overview,
     news_fetcher: Callable[[str, int], List[Dict]] = fetch_recent_headlines,
     review_fetcher: Callable[[str, str, int], List[Dict]] = fetch_trustpilot_reviews,
+    web_searcher: Callable[[str, int], List[Dict]] = perform_web_search,
+    summary_builder: Callable[[str, List[Dict], List[Dict], List[Dict]], Dict] = summarise_market_signals,
     news_limit: int = 5,
     review_limit: int = 5,
     trustpilot_country: str = "uk",
@@ -80,10 +84,35 @@ def gather_signals(
     headlines = news_fetcher_retry(company_name, limit=news_limit)
     reviews = reviews_fetcher_retry(domain, country=trustpilot_country, limit=review_limit)
 
+    web_queries = {
+        "automation": f"{company_name} automation initiative",
+        "customer_experience": f"{company_name} customer complaints {trustpilot_country.upper()}",
+        "regulation": f"{company_name} compliance enforcement",
+        "competitors": f"{company_name} competitors AI strategy",
+    }
+    web_results: List[Dict] = []
+    for tag, query in web_queries.items():
+        try:
+            results = web_searcher(query, limit=news_limit)
+        except Exception:
+            results = []
+        for item in results:
+            item = dict(item)
+            item.setdefault("tag", tag)
+            web_results.append(item)
+
+    summaries: Dict = {}
+    try:
+        summaries = summary_builder(company_name, headlines, reviews, web_results)
+    except Exception:
+        summaries = {}
+
     return {
         "site_overview": site_info,
         "recent_headlines": headlines,
         "reviews": reviews,
+        "web_results": web_results,
+        "summaries": summaries,
     }
 
 

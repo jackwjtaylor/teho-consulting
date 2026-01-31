@@ -35,6 +35,8 @@ Teho Consulting is building simple AI-led services for UK businesses. Our first 
 - Jobs inserted via `/admin` show up in `automation_runs`; the worker flips them to `in_progress` and eventually `succeeded`/`failed`, with the latest log stored in the `payload` column for visibility inside the portal.
 - This produces `reports/<slug>/summary.*` for the executive teaser and `reports/<slug>/full.*` for the comprehensive briefing, alongside the packaged HTML/PDF/email assets.
 - By default the CLI now creates/uses a Supabase Storage bucket called `reports` and uploads the generated Markdown, branded HTML, PDF (if WeasyPrint is installed), and email draft. Use `--no-upload` on either command to skip this step.
+- Each run assembles a fresh citation catalogue (S#/N#/B#) from `data/raw/<slug>/sources.csv`; if the generated markdown omits citations or references unknown labels the CLI aborts so you can patch the research before sending.
+- Collector runs now add OpenAI web-search intelligence plus competitor, customer, and regulatory summaries into the context so persona hooks, KPI tables, and practical examples stay grounded.
 - To (re)create the storage bucket manually run:
   ```bash
   .venv/bin/teho ensure-storage
@@ -63,3 +65,14 @@ Assign metadata quickly with:
 ```
 
 Use `http://localhost:3000/admin` for the internal CRM + analytics view (see `docs/internal_crm.md` for env requirements) and `/dashboard` for the client-facing report list.
+
+### Local agent UI
+
+Run the lightweight Streamlit UI for agent-driven reports:
+
+```bash
+python -m pip install -e .[ui]
+streamlit run agent_ui.py
+```
+
+For Google Drive uploads, create an OAuth client in Google Cloud, download the client secrets JSON, and set `GOOGLE_OAUTH_CLIENT_SECRETS` (plus optional `GOOGLE_DRIVE_FOLDER_ID`). The UI stores a token at `agent-runner/drive_token.json` after the first login.

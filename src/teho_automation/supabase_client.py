@@ -108,6 +108,28 @@ def fetch_requests(status: Optional[str] = None, limit: int = 50) -> SupabaseRes
         return SupabaseResult(success=False, message=str(exc))
 
 
+def fetch_request_by_slug(slug: str) -> SupabaseResult:
+    """Fetch a single briefing request by slug."""
+    client = _build_client()
+    if client is None:
+        return SupabaseResult(success=False, message="Supabase not configured")
+
+    try:
+        response = (
+            client.table(TABLE_NAME)
+            .select("*")
+            .eq("slug", slug)
+            .limit(1)
+            .execute()
+        )
+        rows = response.data or []
+        if not rows:
+            return SupabaseResult(success=False, message=f"No request found for slug {slug}")
+        return SupabaseResult(success=True, data=rows[0], message="Fetched")
+    except Exception as exc:  # pragma: no cover
+        return SupabaseResult(success=False, message=str(exc))
+
+
 def ensure_reports_bucket() -> SupabaseResult:
     """Ensure the reports storage bucket exists."""
     client = _build_client()

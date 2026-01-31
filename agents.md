@@ -22,12 +22,15 @@
 - `teho validate-context data/raw/<slug>/context.json` – schema + recency check (flags headlines older than 24 months).
 - `teho generate <slug> --report executive --report comprehensive` – call OpenAI using `OPENAI_API_KEY`; add `--dry-run` to inspect prompts without hitting the API.
 - `teho package <slug>` – convert snapshot markdown to branded HTML/PDF and produce teaser email copy.
+- `teho init-research <slug>` – scaffold the YAML research bundle required for the board-grade report; fill it with sourced bullets, tables, and opportunity data before generation.
+- `teho generate <slug> --report board` – run the master prompt to create the McKinsey/Bain-style automation deck (requires the research bundle + context). Saves Markdown/HTML/PDF + email draft.
+- `teho run-job <slug>` – end-to-end pipeline: initialise folders, collect web/news signals, pull Companies House filings (when `COMPANIES_HOUSE_API_KEY` is set), build the research bundle, generate full + summary + board reports, package the snapshot, and upload HTML/PDF/email assets to Supabase.
 - `teho queue-request "Company" --domain example.com [...]` – append to `data/company_queue.csv` for manual/internal triggers.
 - `teho list-requests [--status queued]` – inspect Supabase queue (falls back to CSV locally).
 - `teho process-queue --limit 1 --generate --package` – pull queued requests, initialise folders, optionally generate reports and package assets.
 - `teho assign-portal-user <email> <client-slug>` – attach client metadata to a Supabase auth user so the portal RLS works.
 - `teho log-outreach --client-slug <slug> --contact-email <email> --event-type <sent|opened|clicked|replied>` – capture outreach signals for analytics.
-- `teho automation-worker --poll 30` – consume portal automation requests (generate/package/process) and update Supabase status.
+- `teho automation-worker --poll 30` – optional background loop; the portal now runs `teho run-job <slug>` inline when you click “Run full job”.
 - Automation design notes live in `docs/automation_blueprint.md` & `docs/workflow_map.md`.
 - Intake specifics & Supabase schema live in `docs/intake_pipeline.md`.
 - Internal CRM + analytics live at `/admin` in the portal (service-key powered queue + dashboard).
@@ -43,24 +46,22 @@
 7. **Add-ons** – vendor shortlist/RFP pack, internal comms kit, investor briefing.
 
 ## 5. Current Status (Oct 2025)
-- **Reports**: Gousto (QA approved, needs regeneration with new summary/full split); Bloom & Wild (summary + full regenerated with new brand styling, uploaded to Supabase, portal-ready).
-- **Prompt**: `docs/prompt_v1.md` instructs the model to rely on data from the last 24 months, produce executive vs full outputs, and flag gaps.
-- **Automation**: collectors for website, news, Trustpilot; prompt runner validates output sections; packaging outputs branded HTML + PDF and stores assets in Supabase. Queue + Supabase sync in place.
-- **Portal**: `../teho-portal/` lists reports by `client_slug`, serves HTML inline, and offers PDF downloads. Requires Supabase user metadata to match the target `client_slug`.
+- **Reports**: Solar Wines & PHMG run end-to-end through the new “Run full job” button (collect → full + summary → packaged snapshot → email draft). Gousto still needs regeneration with the new flow.
+- **Prompt**: `docs/prompt_v1.md` is being upgraded to the master McKinsey/Bain-style instruction (see plan in TODO). Current outputs still reference the older structure.
+- **Automation**: collectors for website, news, Trustpilot; Companies House enrichment drops structured filings into each context when the API key is present; prompt runner validates output sections; packaging outputs branded HTML/PDF/email and stores them in Supabase, now writing `email_draft.txt` for the portal to reuse.
+- **Portal**: `/admin` runs the CLI inline, displays QA assets via a styled viewer, auto-populates outreach drafts, logs events in Supabase, and now includes a “Clear completed” automation queue button plus smarter QA links that always pick the latest upload. Requires Supabase auth metadata to match `client_slug`.
 - **Landing site**: `landing/teho/` marketing pages with updated palette. Public form posts into Supabase + CLI queue.
 
 ## 6. Active Work & Priorities
-Consult `docs/todo.md` (kept current). Highlights as of last update:
-- Regenerate Gousto assets with refreshed summary/full split and upload to Supabase.
-- Tighten Supabase RLS + automate user metadata sync so portal accounts only see their own `client_slug`.
-- Polish portal UI to mirror report styling and clarify actions (view vs download).
-- Expand automation runbooks to cover portal publishing, then move on to caching/retries, richer data sources, contact enrichment.
-- Implement outreach metrics pipeline (webhooks + dashboard).
-- Define compliance (consent logging, data retention, secret management) and financial refresh cadence.
-- Specify pricing/payment flow for paid unlocks/advisory (invoicing or Stripe) and craft customer email templates.
+- Consult `docs/todo.md` (kept current). Highlights:
+  - Regenerate Gousto (and future clients) using the new full-job flow.
+  - Build the research pipeline to meet the master AI consulting instruction: source-backed snapshot, sector benchmarks, peer signals, and opportunity scoring.
+  - Add citation tooling (S#/N#/B#) and value-model validation before reports ship.
+  - Continue compliance, outreach metrics, and pricing track once report quality is locked in.
 
 ## 7. Key Considerations
 - **Data recency**: Reports must cite sources ≤24 months old. Validation flags stale entries; update `sources.csv` before sending.
+- **Citations**: The CLI builds an S#/N#/B# catalogue from `sources.csv` and fails generation if citations are missing or reference unknown IDs—keep the sources list clean.
 - **Tone**: All copy and reports use plain, friendly British English. Avoid jargon and exposing internal automation mechanics to clients.
 - **Manual gates**: QA checklist (`docs/qa_checklist.md`) is mandatory before shipping any report; log findings under `logs/qa/{company}.md`.
 - **Secrets**: Store API keys (OpenAI, future data sources) in `.env` and never commit. Add guardrails before wiring to the web form.
@@ -72,11 +73,14 @@ Consult `docs/todo.md` (kept current). Highlights as of last update:
 2. `pytest` to ensure baseline passes.
 3. Review `docs/todo.md` and `data/company_queue.csv` (plus Supabase requests) to pick your next action.
 4. If working on a company:
+   - `.venv/bin/teho run-job <slug>` mirrors the portal pipeline (collectors, Companies House enrichment, research bundle, full + summary + board generation, packaging, uploads). Use the manual steps below only when you need to re-run a specific stage.
    - `teho validate-context data/raw/<slug>/context.json`
    - Refresh sources/headlines as needed.
+   - (Optional) `teho research <slug>` to regenerate the research bundle manually; the portal runs this (plus Companies House enrichment) automatically when you click “Run full job”.
    - `teho generate <slug> --report executive --report snapshot` (use `--dry-run` first if needed).
    - QA via checklist, then `teho package <slug>` to create/upload snapshot assets.
    - Regenerate full reports with `.venv/bin/teho generate <slug> --report executive --report comprehensive --upload` when data is ready.
+   - When the research pack is complete (either via automation or manual edits), run `.venv/bin/teho generate <slug> --report board --upload` to produce the board-level briefing.
 5. For landing/ops tasks, edit under `landing/teho/` or `../teho-portal/`, keeping design aligned with the current palette, then run `npm run dev` inside the portal for local testing.
 
 ## 9. Contact & Handover Notes

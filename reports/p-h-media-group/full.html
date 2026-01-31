@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <title>Opportunity Report – Full</title>
+        <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  color-scheme: light;
+  --bg: #e8e7e1;
+  --surface: #f4f2ed;
+  --surface-alt: #ffffff;
+  --border: #d7d3c6;
+  --text: #1f201e;
+  --muted: #596152;
+  --primary: #2b3625;
+  --primary-light: #3e4739;
+  --accent: #78957a;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 56px 0;
+  line-height: 1.7;
+}
+
+.report-page {
+  margin: 0 auto;
+  max-width: 920px;
+  padding: 0 28px 72px;
+}
+
+.report-card {
+  background: var(--surface-alt);
+  border-radius: 28px;
+  box-shadow: 0 28px 55px rgba(21, 25, 19, 0.16);
+  overflow: hidden;
+  border: 1px solid rgba(27, 30, 25, 0.08);
+}
+
+.report-hero {
+  background: linear-gradient(125deg, rgba(43, 54, 37, 0.92), rgba(120, 149, 122, 0.62));
+  color: #f8f7f3;
+  padding: 54px 56px 48px;
+  display: grid;
+  gap: 32px;
+}
+
+.report-hero__brand {
+  font-size: 18px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.78;
+}
+
+.report-hero__client {
+  font-size: 20px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.report-hero__title {
+  font-size: clamp(2.4rem, 4vw, 2.9rem);
+  font-weight: 700;
+  letter-spacing: 0.015em;
+  line-height: 1.1;
+}
+
+.report-hero__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px 32px;
+}
+
+.report-hero__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.report-hero__meta-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.report-hero__meta-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fefbf6;
+}
+
+.report-body {
+  padding: 48px 56px 60px;
+  display: grid;
+  gap: 32px;
+  font-size: 1.05rem;
+}
+
+.report-body h1 {
+  display: none;
+}
+
+.report-body h2 {
+  font-size: 1.6rem;
+  margin: 12px 0 6px;
+  padding: 18px 0 12px;
+  border-bottom: 2px solid rgba(43, 54, 37, 0.14);
+}
+
+.report-body h3 {
+  font-size: 1.25rem;
+  margin: 20px 0 8px;
+  color: var(--primary);
+}
+
+.report-body p {
+  margin: 0;
+  line-height: 1.78;
+}
+
+.report-body strong {
+  color: var(--primary);
+}
+
+.report-body a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(43, 54, 37, 0.35);
+}
+
+.report-body a:hover {
+  border-bottom-color: rgba(43, 54, 37, 0.65);
+}
+
+.report-body ul,
+.report-body ol {
+  margin: 0;
+  padding-left: 28px;
+  display: grid;
+  gap: 10px;
+}
+
+.report-body li {
+  line-height: 1.72;
+}
+
+.report-body table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 20px 0;
+  font-size: 0.98rem;
+  overflow-x: auto;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(43, 54, 37, 0.1);
+}
+
+.report-body thead {
+  background: rgba(43, 54, 37, 0.08);
+}
+
+.report-body th,
+.report-body td {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid rgba(43, 54, 37, 0.08);
+}
+
+.report-body tbody tr:nth-child(even) {
+  background: rgba(232, 231, 225, 0.35);
+}
+
+.report-body tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.report-body blockquote {
+  background: rgba(39, 50, 34, 0.08);
+  border-left: 4px solid rgba(43, 54, 37, 0.45);
+  padding: 18px 24px;
+  font-style: italic;
+  color: var(--primary);
+}
+
+.report-body hr {
+  border: none;
+  height: 1px;
+  background: rgba(43, 54, 37, 0.12);
+  margin: 12px 0 4px;
+}
+
+.summary-callout {
+  margin: 8px 0 12px;
+  padding: 24px 26px;
+  border-radius: 24px;
+  background: rgba(232, 231, 225, 0.75);
+  border: 1px solid rgba(43, 54, 37, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.summary-callout h3 {
+  margin: 0 0 12px;
+}
+
+.cta-banner {
+  margin-top: 8px;
+  padding: 24px 26px;
+  border-radius: 24px;
+  background: linear-gradient(120deg, rgba(43, 54, 37, 0.9), rgba(120, 149, 122, 0.58));
+  color: #f9f8f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cta-banner a {
+  color: #f9f8f4;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cta-banner__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 11px 20px;
+}
+
+@media (max-width: 780px) {
+  body {
+    padding: 32px 0;
+  }
+  .report-page {
+    padding: 0 18px 48px;
+  }
+  .report-hero {
+    padding: 40px 28px;
+  }
+  .report-body {
+    padding: 36px 28px 44px;
+    font-size: 1rem;
+  }
+}
+
+@media print {
+  @page {
+    margin: 18mm 15mm 22mm;
+  }
+  body {
+    background: #ffffff;
+    padding: 0;
+  }
+  .report-page {
+    max-width: 100%;
+    padding: 0 15mm 20mm;
+  }
+  .report-card {
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .report-hero {
+    padding: 28px 28px 24px;
+  }
+  .report-body {
+    padding: 32px 28px 40px;
+    font-size: 11pt;
+  }
+  .report-body h2 {
+    page-break-after: avoid;
+  }
+  .report-body table {
+    table-layout: fixed;
+    width: 100%;
+    font-size: 10pt;
+  }
+  .report-body th,
+  .report-body td {
+    word-break: break-word;
+    white-space: normal;
+  }
+  table {
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+}
+</style>
+      </head>
+      <body>
+        <div class="report-page">
+          <div class="report-card">
+            <header class="report-hero">
+              <div class="report-hero__brand">Teho Consulting</div>
+              <div class="report-hero__client">P H Media Group</div>
+              <div class="report-hero__title">Opportunity Report – Full</div>
+              <div class="report-hero__meta"><div class="report-hero__meta-item"><span class="report-hero__meta-label">Date</span><span class="report-hero__meta-value">2026-01-01</span></div><div class="report-hero__meta-item"><span class="report-hero__meta-label">Analyst</span><span class="report-hero__meta-value">Teho Consulting AI Advisory Team</span></div><div class="report-hero__meta-item"><span class="report-hero__meta-label">Business</span><span class="report-hero__meta-value">P H Media Group</span></div><div class="report-hero__meta-item"><span class="report-hero__meta-label">Report Depth</span><span class="report-hero__meta-value">Full</span></div></div>
+            </header>
+            <section class="report-body">
+              <h2>1. EXECUTIVE SUMMARY</h2>
+<ul>
+<li>
+<p>Context: PHMG is a profitable, growing audio‑branding and caller‑experience business (FY2023 revenue £85.5m; &gt;36,000 clients; transitioned to an Employee Ownership Trust in Apr 2025). Retention and expansion of the large recurring base are the highest‑leverage levers for near‑term margin and cash‑flow improvement.</p>
+</li>
+<li>
+<p>Recommendation (short list for the Chief Client Officer):</p>
+<ol>
+<li>Predictive churn scoring and early‑intervention playbooks — priority pilot (quick win, medium effort). Directly addresses churn; leverages PHMG Portal and Complete Caller Experience telemetry. Illustrative retained revenue: £0.8M–£2.5M/yr; churn −1 to −3 p.p.</li>
+<li>Renewal &amp; upsell orchestration with tailored offer generation — quick win to shorten renewal cycles and raise ARPU. Illustrative uplift: £0.9M–£4.0M/yr.</li>
+<li>Automated 'Action Pack' insights from caller analytics — automated, prioritized recommendations to drive adoption of analytics‑led changes. Illustrative uplift: £0.4M–£2.0M/yr.</li>
+</ol>
+</li>
+<li>
+<p>Strategic / Big bet: Automated A/B experimentation platform for caller experiences — high impact on reported ROI and stickiness but high implementation complexity and safety/regulatory controls required. Illustrative uplift: £0.5M–£4.0M/yr.</p>
+</li>
+<li>
+<p>Near term actions (30–90 days): approve a 90‑day pilot for predictive churn scoring; run a DPIA &amp; data map; allocate a small cross‑functional team (Data/ML, Product, CSM, Legal, Engineering); implement human‑in‑the‑loop playbooks surfaced in the PHMG Portal.</p>
+</li>
+<li>
+<p>Caution: All automation affecting customers, pricing or contract terms must maintain human approval gates; cross‑border data flows, profiling rules under GDPR and electronic‑marketing rules must be addressed upfront (see Risks &amp; Mitigations and Guardrails).</p>
+</li>
+</ul>
+<h2>2. COMPANY SNAPSHOT</h2>
+<ul>
+<li>
+<p>Legal &amp; ownership: PHMG operating across multiple legal entities (PH Media (USA) Inc.; Please Hold (UK) Ltd.; PHMG (Australia) PTY LTD; PHMG (Canada) Inc.; PHMG (New Zealand) Ltd.). Transitioned to Employee Ownership Trust (Apr 2025).</p>
+</li>
+<li>
+<p>Core offers: exclusive music, on‑hold marketing, copywriting &amp; voice artistry, post‑production, sonic identity, Complete Caller Experience (named cloud telephony product), PHMG Portal (client portal), analytics &amp; caller consultancy.</p>
+</li>
+<li>
+<p>Customers &amp; footprint: enterprise global brands (Samsung, Adidas, Coca‑Cola, Audi, Rawlings), plus a large SME base across primary English‑speaking markets (UK, US, Australia, Canada, NZ) and 50+ countries.</p>
+</li>
+<li>
+<p>Tech signals: cloud telephony platforms, caller behaviour analytics (Complete Caller Experience), PHMG Portal, some AI‑enabled capabilities and patented processes noted on site.</p>
+</li>
+<li>
+<p>Leadership: experienced commercial and product leadership (CEO, CRO, CCO, CSO, CTO, Product Director (Cloud), Director of Client Technical Services, VP Creative) — favourable governance for cross‑functional pilots.</p>
+</li>
+</ul>
+<h2>3. FINANCIAL SIGNALS (RELEVANT TO RETENTION)</h2>
+<ul>
+<li>
+<p>Revenue &amp; growth: Group revenue £85.5m in FY2023 (up from £75.0m in 2022). Double‑digit growth over 2021–2023.</p>
+</li>
+<li>
+<p>Profitability &amp; margins: consistently profitable (FY2023 operating profit £16.5m; PBT £12.3m; net profit ~£9.4m). Gross/operating margins have compressed modestly as growth investment increased.</p>
+</li>
+<li>
+<p>Unit economics: management reports c.90–91% of client subscription revenue retained each year (2021–2023). Implied revenue per client (2023) ~£2.3k/year (illustrative). With ~36k clients, small percentage improvements in churn or ARPU scale materially.</p>
+</li>
+<li>
+<p>Balance sheet / funding posture: trading subsidiaries show strong net assets and working capital; holding companies carry structural leverage. Financing is bank/institutional debt rather than external equity.</p>
+</li>
+</ul>
+<p>Implication: retention investments that reduce churn even modestly and increase adoption/upsell should deliver disproportionately high ROI versus headcount increases.</p>
+<h2>4. RECENT DEVELOPMENTS (INPUT DATA NOTES)</h2>
+<ul>
+<li>Inputs used: PHMG corporate site, FY2023 disclosures and corporate blogs (including EOT announcement Apr 2025). No additional live web search has been run for events since 2024‑07‑01; I can run a targeted news search if you want a compiled timeline of product launches, leadership movement or partnerships (please confirm language and event‑type preferences).</li>
+</ul>
+<h2>5. MARKET &amp; COMPETITOR CONTEXT</h2>
+<ul>
+<li>
+<p>Direct/adjacent competitors include Mood Media, PlayNetwork, Soundtrack (Soundtrack Your Brand), Rockbot, TouchTunes, SiriusXM Music for Business and analytics specialists like Veritonic.</p>
+</li>
+<li>
+<p>Observed peer capabilities: multi‑location music streaming, curated playlists, audio messaging, multi‑zone scheduling, some analytics/testing capabilities and (in parts of the market) AI playlist/curation tools.</p>
+</li>
+<li>
+<p>PHMG differentiators: exclusive music catalogue, voice/artistry and creative capability, patented processes, cloud telephony product (Complete Caller Experience), and a client portal with analytics — putting PHMG in a strong position to monetize analytics and caller experience optimisation at scale.</p>
+</li>
+</ul>
+<h2>6. PROBLEM &amp; PAIN‑POINT MAP (RETENTION‑FOCUSED)</h2>
+<ul>
+<li>
+<p>Primary retention friction points (from the provided process map):</p>
+<ul>
+<li>Low frequency of actionable insights delivered to clients -&gt; low adoption of analytics‑driven changes.</li>
+<li>Incomplete onboarding / low PHMG Portal activation -&gt; clients don’t see the value that drives renewals/upsell.</li>
+<li>Slow pilot → commercial conversion; long proposal turnaround -&gt; revenue leakage and delayed expansion.</li>
+<li>Contract/renewal friction &amp; discounting -&gt; lost renewal margin and slower closes.</li>
+<li>Support/incident MTTR and billing disputes -&gt; customer dissatisfaction and potential churn.</li>
+</ul>
+</li>
+<li>
+<p>These issues map directly to CCO account objectives: reduce churn, raise net retention and increase upsell conversion while containing operating cost in CSM function.</p>
+</li>
+</ul>
+<h2>7. OPPORTUNITY MAP (GROUPED BY RETENTION IMPACT)</h2>
+<ul>
+<li>
+<p>Retention &amp; Upsell (high direct impact):</p>
+<ul>
+<li>Predictive churn scoring + early‑intervention playbooks (H impact / M effort)</li>
+<li>Renewal &amp; upsell orchestration with tailored offer generation (H impact / M effort)</li>
+<li>Account health scoring + templated strategic growth plans (M impact / M effort)</li>
+</ul>
+</li>
+<li>
+<p>Activation &amp; analytics adoption (scales consultancy):</p>
+<ul>
+<li>Automated 'Action Pack' insights from caller analytics (H impact / M effort)</li>
+<li>Automated A/B experimentation platform for caller experiences (H impact / H effort; big bet)</li>
+<li>PHMG Portal intelligent onboarding assistant (M impact / M effort)</li>
+</ul>
+</li>
+<li>
+<p>Risk reduction &amp; efficiency (operational leverage):</p>
+<ul>
+<li>AI‑driven pre‑deployment QA &amp; licensing clearance accelerator (M impact / M effort)</li>
+<li>AI‑augmented support triage and knowledge‑assist (M impact / M effort)</li>
+<li>Automated billing anomaly detection &amp; DSO forecasting (M impact / M effort)</li>
+<li>Pilot‑to‑commercial acceleration workflow (M impact / M effort)</li>
+</ul>
+</li>
+</ul>
+<p>Each opportunity includes defined data prerequisites, integrations and guardrails in the appended inventory. Quick wins are those that reuse Portal + Complete Caller Experience telemetry and require moderate engineering to surface outputs to CSMs and clients.</p>
+<h2>8. TOP 5 OPPORTUNITIES — DEEP DIVES (PRIORITISED FOR THE CHIEF CLIENT OFFICER)</h2>
+<p>Note: each deep dive pulls directly from the opportunity inventory. Values are illustrative ranges provided in the input and should be treated as delta estimates dependent on adoption.</p>
+<ol>
+<li>Predictive churn scoring and early‑intervention playbooks</li>
+</ol>
+<ul>
+<li>
+<p>What it does: train a churn‑risk model using PHMG Portal engagement, Complete Caller Experience analytics, CRM metadata, billing and support history; surface scored accounts in the Portal; auto‑generate ranked playbooks (proactive analytics review, tailored audio refresh offers, timed renewal touches) with templated client communications. Low‑effort actions auto‑trigger; higher‑impact offers require CSM approval.</p>
+</li>
+<li>
+<p>Why it matters to retention: small reductions in churn scale across ~36k clients (illustrative retained revenue £0.8M–£2.5M/yr). KPI uplift: churn −1 to −3 p.p.; net retention +1 to +4 p.p.; renewals within 90 days +10–25%.</p>
+</li>
+<li>
+<p>Data prerequisites: Portal activity logs, caller analytics (call volumes/IVR metrics), CRM/account metadata, billing/subscription status, support ticket history, creative delivery/revision history.</p>
+</li>
+<li>
+<p>Integrations: PHMG Portal (CSM UI &amp; notification surface), Complete Caller Experience, CRM, billing ledger, email/marketing automation and calendar.</p>
+</li>
+<li>
+<p>Guardrails/compliance highlights: human‑in‑the‑loop for pricing/contract changes; DPIA and lawful basis for profiling; GDPR/marketing consent management; model explainability for CSMs; secure RBAC and encryption for billing/contract data.</p>
+</li>
+<li>
+<p>MVP / pilot scope (90 days):</p>
+<ul>
+<li>Cohort: a representative pilot cohort (e.g., 500–2,000 SME accounts or a set of top enterprise accounts depending on data availability).</li>
+<li>Deliverables: offline model + risk scores; Portal dashboard surfacing top 50–200 at‑risk accounts; 3 templated early‑intervention playbooks; a reporting pack comparing pilot cohort churn vs control.</li>
+<li>Success criteria: achieve ≥1 p.p. reduction in churn for pilot cohort vs control; ≥10% adoption of recommended playbooks; CSM qualitative buy‑in.</li>
+</ul>
+</li>
+<li>
+<p>Estimated resources: Product owner (CSM sponsor), 1 Data Engineer, 1 ML Engineer/Data Scientist, 1 Integration Engineer, 1 Portal/Frontend dev, part‑time Legal/Compliance.</p>
+</li>
+</ul>
+<ol start="2">
+<li>Automated 'Action Pack' insights from caller analytics to increase frequency and adoption</li>
+</ol>
+<ul>
+<li>
+<p>What it does: deterministic rules + LLM summarisation on Complete Caller Experience data produce prioritized recommendations (Action Packs) with estimated impact and effort; delivered in‑portal and to CSM dashboards with one‑click options to request creative refresh or run experiments.</p>
+</li>
+<li>
+<p>Why it matters: increases the cadence of value delivered to clients, drives adoption of analytics‑led actions, and creates more upsell and renewal evidence. Illustrative value £0.4M–£2.0M/yr. KPI uplift: +2–6 insights/client/month; recommendation adoption +10–35%.</p>
+</li>
+<li>
+<p>Data prerequisites &amp; integrations: Complete Caller Experience exports, Portal engagement logs, creative asset performance history, client segmentation; integration points: Portal, caller analytics engine, creative production workflow, CSM dashboard/CRM.</p>
+</li>
+<li>
+<p>Guardrails: redact/pseudonymise caller‑level PII; require client approval for production changes; LLM outputs constrained to templates with confidence labels; check recommendations against client brand rules.</p>
+</li>
+<li>
+<p>MVP / pilot scope: generate Action Packs for a subset of clients (e.g., 500), surface to CSMs and a sample of clients, enable one‑click request workflow for creative refresh (not auto‑deploy), measure adoption and lift.</p>
+</li>
+</ul>
+<ol start="3">
+<li>Renewal and upsell orchestration with tailored offer generation</li>
+</ol>
+<ul>
+<li>
+<p>What it does: combine churn risk, Portal engagement, usage of services and contract data to auto‑generate personalised renewal and upsell packages, populate proposal templates, recommend pricing bands and trigger timed outreach; exceptions escalate to sales/legal.</p>
+</li>
+<li>
+<p>Why it matters: shortens renewal time, reduces discounting, increases ARPU and protects margin. Illustrative uplift £0.9M–£4.0M/yr. KPI uplift: time to close renewal −20–60%; upsell conversion +5–20%.</p>
+</li>
+<li>
+<p>Data prerequisites &amp; integrations: contract terms &amp; renewal dates, historical discounting/win‑loss data, Portal usage, creative/licensing status, CRM, billing, legal workflow.</p>
+</li>
+<li>
+<p>Guardrails: manager/legal approval for discounts above thresholds; auto‑validate licensing before including assets; audit trail for proposals.</p>
+</li>
+<li>
+<p>MVP / pilot scope: target renewals in the next 90 days (e.g., 100–300 accounts), auto‑generate proposals for those accounts, measure time‑to‑close and discount incidence vs baseline.</p>
+</li>
+</ul>
+<ol start="4">
+<li>Account health scoring and templated strategic growth‑plan generation</li>
+</ol>
+<ul>
+<li>
+<p>What it does: compute an account health score from usage, revenue, support activity and churn risk; auto‑produce templated QBR/growth plans (QBR agenda, recommended investments, pilot proposals) for CSM customisation and prioritised outreach.</p>
+</li>
+<li>
+<p>Why it matters: ensures high‑value accounts receive consistent, timely coverage and growth plans — directly improving expansion probability. Illustrative uplift £0.6M–£3.0M/yr. KPI uplift: strategic account coverage +30–80%; upsell +5–15%.</p>
+</li>
+<li>
+<p>Data prerequisites &amp; integrations: CRM segmentation, Portal &amp; caller analytics, support history, pilot outcomes, Calendar/proposal tools.</p>
+</li>
+<li>
+<p>Guardrails: CSM final approval required; auditability and bias audits of scoring; sanitise cross‑account comparisons.</p>
+</li>
+<li>
+<p>MVP / pilot scope: compute health scores for the top 200 strategic accounts, generate templated growth plans for each, measure CSM time saved and conversion of plans to proposals.</p>
+</li>
+</ul>
+<ol start="5">
+<li>Automated A/B experimentation platform for caller experiences (big bet)</li>
+</ol>
+<ul>
+<li>
+<p>What it does: deploy alternate on‑hold scripts, music tracks, IVR timings or messages via cloud telephony integrations; collect caller analytics; compute statistically valid lift on KPIs and recommend winners with auto‑rollout gated by human approval.</p>
+</li>
+<li>
+<p>Why it matters: provides proof of incremental value from creative changes and analytics, increasing client confidence, adoption and upsell; differentiates PHMG consultancy. Illustrative uplift £0.5M–£4.0M/yr.</p>
+</li>
+<li>
+<p>Data prerequisites &amp; integrations: permissioned access to telephony flows, Complete Caller Experience call‑level metrics, creative asset IDs, client KPI definitions.</p>
+</li>
+<li>
+<p>Guardrails (critical): explicit client consent, prohibit experiments on emergency/regulatory IVR paths, statistical power checks, human sign‑off before rollout, localised data handling.</p>
+</li>
+<li>
+<p>MVP / pilot scope: run 3 experiments with 1–2 enterprise clients that consent and have sufficient call volumes; validate randomisation, measure conversion lift and test rollout process. Success is statistically valid lift and a safe, documented roll‑out path.</p>
+</li>
+</ul>
+<h2>9. VALUE SUMMARY (ILLUSTRATIVE RANGES &amp; KPIS)</h2>
+<ul>
+<li>Predictive churn scoring and early‑intervention playbooks: £0.8M–£2.5M/yr; churn −1 to −3 p.p.; Net retention +1 to +4 p.p.</li>
+<li>Renewal &amp; upsell orchestration: £0.9M–£4.0M/yr; time to close renewal −20–60%; upsell +5–20%.</li>
+<li>Automated 'Action Pack' insights: £0.4M–£2.0M/yr; +2–6 insights/client/month; recommendation adoption +10–35%.</li>
+<li>Account health scoring &amp; growth plans: £0.6M–£3.0M/yr; strategic account coverage +30–80%; upsell +5–15%.</li>
+<li>Automated A/B experimentation platform: £0.5M–£4.0M/yr; conversion lift/Campaign ROI +2–12%; insight adoption +20–50%.</li>
+</ul>
+<p>Note: ranges are illustrative and partially overlapping (same clients may benefit from multiple initiatives). Use the pilot results to calibrate realistic attributable lift and avoid double‑counting when modelling full roll‑out.</p>
+<h2>10. PRIORITISED BACKLOG (ICE-style summary — from supplied prioritisation)</h2>
+<p>Top ranked (score = (impact * confidence) / effort):</p>
+<ol>
+<li>
+<p>Predictive churn scoring and early‑intervention playbooks — Impact 9 / Confidence 8 / Effort 6 — Score 12.0 — Why: high impact on retention; required telemetry exists; moderate integration.</p>
+</li>
+<li>
+<p>Renewal and upsell orchestration with tailored offer generation — Impact 9 / Confidence 7 / Effort 6 — Score 10.5 — Why: high revenue upside; requires CRM/billing/legal alignment.</p>
+</li>
+<li>
+<p>Automated 'Action Pack' insights from caller analytics — Impact 9 / Confidence 7 / Effort 6 — Score 10.5 — Why: scales consultancy; leverages existing analytics.</p>
+</li>
+<li>
+<p>Account health scoring &amp; templated growth plans — Impact 6 / Confidence 7 / Effort 6 — Score 7.0 — Why: standardises strategic coverage, medium effort.</p>
+</li>
+<li>
+<p>Automated billing anomaly detection &amp; DSO forecasting — Impact 6 / Confidence 7 / Effort 6 — Score 7.0 — Why: improves cash flow and reduces dispute‑driven churn risk.</p>
+</li>
+<li>
+<p>AI‑augmented support triage &amp; knowledge‑assist — Impact 6 / Confidence 7 / Effort 6 — Score 7.0 — Why: operational ROI; improves CSAT.</p>
+</li>
+<li>
+<p>AI‑driven pre‑deployment QA &amp; licensing clearance accelerator — Impact 6 / Confidence 7 / Effort 6 — Score 7.0 — Why: reduces rework/delays in go‑live.</p>
+</li>
+<li>
+<p>Automated A/B experimentation platform for caller experiences — Impact 9 / Confidence 6 / Effort 9 — Score 6.0 — Why: strategic, but complex and higher risk; treat as a major program.</p>
+</li>
+<li>
+<p>PHMG Portal intelligent onboarding assistant — Impact 6 / Confidence 6 / Effort 6 — Score 6.0 — Why: improves activation but requires secure connector work.</p>
+</li>
+<li>
+<p>Pilot‑to‑commercial acceleration workflow — Impact 6 / Confidence 6 / Effort 6 — Score 6.0 — Why: standardises pilot success → contract conversion.</p>
+</li>
+</ol>
+<p>(Quadrant mapping: first three are Quick Wins; A/B experimentation is a Big Bet; others are Fill‑Ins.)</p>
+<h2>11. 90‑DAY PILOT PLAN (FOCUS: Predictive Churn Scoring &amp; Playbooks)</h2>
+<p>Objective: validate that risk scoring + automated playbooks reduce churn in a measurable cohort and are operationally safe and compliant.</p>
+<p>Core success metrics (pilot):</p>
+<ul>
+<li>Churn reduction in pilot cohort ≥1 percentage point vs control (60–90 day measurement window + 6 months post‑pilot monitoring recommended).</li>
+<li>Playbook adoption rate ≥10% of high‑risk cases within pilot cohort.</li>
+<li>No material privacy/compliance incidents; DPIA completed prior to pilot launch.</li>
+</ul>
+<p>Team (recommended minimal):</p>
+<ul>
+<li>CCO (sponsor / decision owner)</li>
+<li>CSM lead (product owner for playbooks)</li>
+<li>Product Manager (Portal integrations)</li>
+<li>1 Data Engineer (ETL &amp; feature pipeline)</li>
+<li>1 Data Scientist / ML Engineer</li>
+<li>1 Integration/Backend Engineer (Portal APIs)</li>
+<li>1 Frontend dev (Portal UI for CSMs) — small scope</li>
+<li>Legal/Compliance (part‑time) and Security (part‑time)</li>
+</ul>
+<p>High‑level timeline (90 days)</p>
+<ul>
+<li>
+<p>Week 0 (approval &amp; kickoff): scope, governance, pilot cohort selection, DPIA initiation, data access approvals.</p>
+</li>
+<li>
+<p>Weeks 1–2 (data discovery &amp; mapping): extract/validate Portal logs, caller analytics exports, CRM, billing, support tickets; pseudonymise as required; agree success/control cohorts.</p>
+</li>
+<li>
+<p>Weeks 3–5 (model &amp; playbook design): feature engineering; build baseline churn model; design 2–3 templated playbooks (low effort, medium effort, high effort); include human‑in‑the‑loop escalation rules and manager approval gating.</p>
+</li>
+<li>
+<p>Weeks 6–8 (integration &amp; UI): surface risk scores in Portal CSM dashboard; implement notification and playbook action workflow (no auto‑pricing changes); logging + explainability tooltips for CSMs.</p>
+</li>
+<li>
+<p>Weeks 9–12 (pilot execution &amp; evaluation): run pilot for selected cohort; collect outcomes vs control; gather CSM/client feedback; legal/compliance review; prepare go/no‑go and scale recommendations.</p>
+</li>
+</ul>
+<p>Deliverables at 90 days:</p>
+<ul>
+<li>Operational risk scores surfaced in Portal with explainability and confidence.</li>
+<li>3 playbook templates and workflows (with audit trails).</li>
+<li>Pilot evaluation report: churn delta, playbook adoption, CSM time/effort impact, compliance sign‑offs, recommended roadmap to scale.</li>
+</ul>
+<p>Go/no‑go criteria (example): net pilot churn improvement ≥1 p.p. or strong qualitative evidence to iterate; legal/compliance sign‑offs in place; acceptable false‑positive rate and CSM confidence.</p>
+<h2>12. RISKS &amp; MITIGATIONS (PRIORITISED FOR CCO)</h2>
+<ol>
+<li>
+<p>Data protection &amp; profiling risk (GDPR, PECR, CAN‑SPAM, CASL): run DPIA; document lawful basis; integrate suppression/consent lists; provide opt‑out and transparency in privacy notices.</p>
+</li>
+<li>
+<p>Cross‑border data transfers: map flows; adopt SCCs or localise processing where required; pseudonymise data sent across jurisdictions.</p>
+</li>
+<li>
+<p>Model error / false positives leading to inappropriate outreach: require human review for customer‑impacting actions; show confidence and reason (feature explainability) to CSMs.</p>
+</li>
+<li>
+<p>Pricing / contracting exposure: never allow automated price/contract changes without manager/legal sign‑off; set discount thresholds and approval workflows.</p>
+</li>
+<li>
+<p>Telephony safety/regulatory risk (experiments/configs): prohibit experiments/automations on emergency/compliance flows; require explicit client consent and technical safety checks.</p>
+</li>
+<li>
+<p>IP &amp; licensing risk for creative assets: auto‑validate license metadata before recommending or bundling assets; human legal sign‑off for exceptions.</p>
+</li>
+<li>
+<p>Security of credentials &amp; payment data: use vaults for credentials, tokenisation for payment details, PCI compliance where required; strict RBAC and audit logging.</p>
+</li>
+</ol>
+<p>Governance recommendations:</p>
+<ul>
+<li>Establish a cross‑functional AI governance working group (Product/CSM/Data/Legal/Security) chaired by CCO/CTO for retention projects.</li>
+<li>Require DPIA and legal sign‑off before any pilot that profiles or triggers customer contact.</li>
+<li>Maintain model performance dashboards and retrain cadence plus a human escalation path for disputed scores.</li>
+</ul>
+<h2>13. APPENDIX</h2>
+<p>A. Primary inputs for this report (provided): PHMG corporate site and leadership pages; provided process map of Acquire→Convert→Fulfil→Serve/Retain→Back Office; detailed opportunity inventory and prioritisation; financial signals &amp; scale signals (FY2023 revenue, client counts, EOT transition). Specific source list in the supplied dataset includes corporate.phmg.com pages and statutory filings.</p>
+<p>B. Next immediate steps (recommended):</p>
+<ol>
+<li>Approve the 90‑day pilot (budget &amp; core team).</li>
+<li>Initiate DPIA and data‑flow mapping; confirm legal/marketing engagement to manage outreach rules.</li>
+<li>Identify pilot cohort and CSM sponsor(s); schedule a kickoff within 2 weeks.</li>
+<li>Decide whether to run a targeted live web search to gather 8–15 recent material events about PHMG (product launches, partnerships, leadership moves) to enrich competitive and go‑to‑market context — if yes, specify language preference (English) and event types to prioritise.</li>
+</ol>
+<p>C. Contact point for follow up: prepare a one‑page executive brief for the CEO/CFO and a technical annex for CTO/Head of Data if you want the 90‑day pilot resourcing estimate converted to an internal budget request.</p>
+<p>-- End of report --</p>
+
+            </section>
+          </div>
+        </div>
+      </body>
+    </html>

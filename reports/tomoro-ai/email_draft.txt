@@ -1,0 +1,26 @@
+Subject: A few high-leverage product ideas for Tomoro.ai (quick snapshot)
+
+Hi [First Name],
+
+I took a quick pass at where Tomoro.ai could add near-term leverage across the sales-to-production lifecycle, and pulled together a short snapshot you can skim:
+
+Snapshot: 
+Full report preview: 
+
+Top opportunities that stood out:
+1) Inbound qualification agent + fast-track NDA workflow
+2) Agent observability + prompt/behaviour regression testing for multi-agent orchestration and persona control
+3) PoC-to-production NFR gate + cost/latency estimator
+4) Discovery & value-hypothesis copilot to lock success criteria and ROI earlier
+5) Incident correlation assistant: link hallucinations/safety incidents to model/version/data changes
+
+If any of these are already on your roadmap, I’d love to compare notes—especially around how you’re thinking about de-risking PoC→prod and tightening observability/regression testing.
+
+Open to a 15-minute chat next week? Here’s my calendar: https://calendly.com/teho-jack/tomoro-ai
+
+Best,
+[Your Name]
+[Title]
+[Company]
+[Phone]
+[Email]

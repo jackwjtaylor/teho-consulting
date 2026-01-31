@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <title>Opportunity Report – Executive Summary</title>
+        <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  color-scheme: light;
+  --bg: #e8e7e1;
+  --surface: #f4f2ed;
+  --surface-alt: #ffffff;
+  --border: #d7d3c6;
+  --text: #1f201e;
+  --muted: #596152;
+  --primary: #2b3625;
+  --primary-light: #3e4739;
+  --accent: #78957a;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 56px 0;
+  line-height: 1.7;
+}
+
+.report-page {
+  margin: 0 auto;
+  max-width: 920px;
+  padding: 0 28px 72px;
+}
+
+.report-card {
+  background: var(--surface-alt);
+  border-radius: 28px;
+  box-shadow: 0 28px 55px rgba(21, 25, 19, 0.16);
+  overflow: hidden;
+  border: 1px solid rgba(27, 30, 25, 0.08);
+}
+
+.report-hero {
+  background: linear-gradient(125deg, rgba(43, 54, 37, 0.92), rgba(120, 149, 122, 0.62));
+  color: #f8f7f3;
+  padding: 54px 56px 48px;
+  display: grid;
+  gap: 32px;
+}
+
+.report-hero__brand {
+  font-size: 18px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.78;
+}
+
+.report-hero__client {
+  font-size: 20px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.report-hero__title {
+  font-size: clamp(2.4rem, 4vw, 2.9rem);
+  font-weight: 700;
+  letter-spacing: 0.015em;
+  line-height: 1.1;
+}
+
+.report-hero__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px 32px;
+}
+
+.report-hero__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.report-hero__meta-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.report-hero__meta-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fefbf6;
+}
+
+.report-body {
+  padding: 48px 56px 60px;
+  display: grid;
+  gap: 32px;
+  font-size: 1.05rem;
+}
+
+.report-body h1 {
+  display: none;
+}
+
+.report-body h2 {
+  font-size: 1.6rem;
+  margin: 12px 0 6px;
+  padding: 18px 0 12px;
+  border-bottom: 2px solid rgba(43, 54, 37, 0.14);
+}
+
+.report-body h3 {
+  font-size: 1.25rem;
+  margin: 20px 0 8px;
+  color: var(--primary);
+}
+
+.report-body p {
+  margin: 0;
+  line-height: 1.78;
+}
+
+.report-body strong {
+  color: var(--primary);
+}
+
+.report-body a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(43, 54, 37, 0.35);
+}
+
+.report-body a:hover {
+  border-bottom-color: rgba(43, 54, 37, 0.65);
+}
+
+.report-body ul,
+.report-body ol {
+  margin: 0;
+  padding-left: 28px;
+  display: grid;
+  gap: 10px;
+}
+
+.report-body li {
+  line-height: 1.72;
+}
+
+.report-body table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 20px 0;
+  font-size: 0.98rem;
+  overflow-x: auto;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(43, 54, 37, 0.1);
+}
+
+.report-body thead {
+  background: rgba(43, 54, 37, 0.08);
+}
+
+.report-body th,
+.report-body td {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid rgba(43, 54, 37, 0.08);
+}
+
+.report-body tbody tr:nth-child(even) {
+  background: rgba(232, 231, 225, 0.35);
+}
+
+.report-body tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.report-body blockquote {
+  background: rgba(39, 50, 34, 0.08);
+  border-left: 4px solid rgba(43, 54, 37, 0.45);
+  padding: 18px 24px;
+  font-style: italic;
+  color: var(--primary);
+}
+
+.report-body hr {
+  border: none;
+  height: 1px;
+  background: rgba(43, 54, 37, 0.12);
+  margin: 12px 0 4px;
+}
+
+.summary-callout {
+  margin: 8px 0 12px;
+  padding: 24px 26px;
+  border-radius: 24px;
+  background: rgba(232, 231, 225, 0.75);
+  border: 1px solid rgba(43, 54, 37, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.summary-callout h3 {
+  margin: 0 0 12px;
+}
+
+.cta-banner {
+  margin-top: 8px;
+  padding: 24px 26px;
+  border-radius: 24px;
+  background: linear-gradient(120deg, rgba(43, 54, 37, 0.9), rgba(120, 149, 122, 0.58));
+  color: #f9f8f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cta-banner a {
+  color: #f9f8f4;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cta-banner__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 11px 20px;
+}
+
+@media (max-width: 780px) {
+  body {
+    padding: 32px 0;
+  }
+  .report-page {
+    padding: 0 18px 48px;
+  }
+  .report-hero {
+    padding: 40px 28px;
+  }
+  .report-body {
+    padding: 36px 28px 44px;
+    font-size: 1rem;
+  }
+}
+
+@media print {
+  @page {
+    margin: 18mm 15mm 22mm;
+  }
+  body {
+    background: #ffffff;
+    padding: 0;
+  }
+  .report-page {
+    max-width: 100%;
+    padding: 0 15mm 20mm;
+  }
+  .report-card {
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .report-hero {
+    padding: 28px 28px 24px;
+  }
+  .report-body {
+    padding: 32px 28px 40px;
+    font-size: 11pt;
+  }
+  .report-body h2 {
+    page-break-after: avoid;
+  }
+  .report-body table {
+    table-layout: fixed;
+    width: 100%;
+    font-size: 10pt;
+  }
+  .report-body th,
+  .report-body td {
+    word-break: break-word;
+    white-space: normal;
+  }
+  table {
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+}
+</style>
+      </head>
+      <body>
+        <div class="report-page">
+          <div class="report-card">
+            <header class="report-hero">
+              <div class="report-hero__brand">Teho Consulting</div>
+              <div class="report-hero__client">P H Media Group</div>
+              <div class="report-hero__title">Opportunity Report – Executive Summary</div>
+              <div class="report-hero__meta"><div class="report-hero__meta-item"><span class="report-hero__meta-label">Date</span><span class="report-hero__meta-value">2026-01-01</span></div><div class="report-hero__meta-item"><span class="report-hero__meta-label">Analyst</span><span class="report-hero__meta-value">Teho Consulting AI Advisory Team</span></div><div class="report-hero__meta-item"><span class="report-hero__meta-label">Business</span><span class="report-hero__meta-value">P H Media Group</span></div><div class="report-hero__meta-item"><span class="report-hero__meta-label">Report Depth</span><span class="report-hero__meta-value">Executive Summary</span></div></div>
+            </header>
+            <section class="report-body">
+              <ol>
+<li>Company Snapshot</li>
+</ol>
+<ul>
+<li>Legal name: PHMG (group entities: PH Media (USA) Inc.; Please Hold (UK) Ltd.; PHMG (AUSTRALIA) PTY LTD; PHMG (CANADA) Inc.; PHMG (NEW ZEALAND) Ltd.). Employee‑owned since Apr 2025.</li>
+<li>Scale &amp; finance: ~36k clients; FY2023 revenue £85.5m (double‑digit growth 2021–23); profitable with healthy working capital at trading subsidiary level.</li>
+<li>Footprint: Manchester HQ + offices in Chicago, Phoenix, Brisbane; clients in 50+ countries.</li>
+<li>Core products: Exclusive music, audio branding, on‑hold marketing, Complete Caller Experience (cloud telephony), PHMG Portal, caller analytics, creative &amp; production services.</li>
+<li>Tech signals: cloud telephony/analytics platform, PHMG Portal, AI‑referenced capabilities, patented processes.</li>
+<li>Customers: global enterprise brands and high‑volume SME base (implied ARPU ~£2.3k/year).</li>
+</ul>
+<ol start="2">
+<li>Top 3 Opportunities (condensed)</li>
+</ol>
+<ul>
+<li>
+<p>Predictive churn scoring + early‑intervention playbooks (Priority #1)</p>
+<ul>
+<li>What: model risk using Portal engagement, caller analytics, billing &amp; support; surface scored accounts and auto‑generate ranked playbooks for CSMs.</li>
+<li>Impact: High; estimated retained revenue £0.8M–£2.5M/yr for 1–3pp churn reduction. Effort: Medium.</li>
+</ul>
+</li>
+<li>
+<p>Renewal &amp; upsell orchestration with tailored offer generation (Priority #2)</p>
+<ul>
+<li>What: auto‑generate personalised renewal/upsell packages using churn score, usage and contract data; auto‑populate proposals and timed outreach.</li>
+<li>Impact: High; estimated incremental revenue £0.9M–£4.0M/yr. Effort: Medium (CRM/billing/legal integrations required).</li>
+</ul>
+</li>
+<li>
+<p>Automated &quot;Action Pack&quot; insights from caller analytics (Priority #3)</p>
+<ul>
+<li>What: deterministic rules + LLM summarisation to deliver prioritized, one‑click recommendations in‑portal (audio refresh, IVR tweaks, A/B tests).</li>
+<li>Impact: High; estimated uplift £0.4M–£2.0M/yr through greater adoption and retention. Effort: Medium.</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li>Why Now</li>
+</ol>
+<ul>
+<li>Large, recurring base (36k clients) means small % improvements scale to material revenue; implied ARPU ~£2.3k amplifies impact.</li>
+<li>PHMG already owns key telemetry (PHMG Portal + Complete Caller Experience) — data prerequisites are largely available.</li>
+<li>Company is growing, profitable and employee‑owned (EOT) — strategic orientation to invest in customer lifetime value and margin preservation.</li>
+<li>AI is already referenced on site and can accelerate automation (scoring, LLM summarisation, guided workflows) with moderate engineering lift.</li>
+<li>Quick wins protect ARR and free CSM capacity for higher‑value selling while larger bets (A/B experimentation) remain follow‑ons.</li>
+</ul>
+<ol start="4">
+<li>90‑Day Pilot Overview (Predictive churn scoring + playbooks)</li>
+</ol>
+<ul>
+<li>Objective: demonstrate that a telemetry‑driven churn score + templated intervention increases early renewals and reduces near‑term churn among a test cohort.</li>
+<li>Scope: 2 segmented cohorts (1) 500 SME recurring clients with mid ARPU; (2) 100 enterprise/high‑ARR accounts. Use 6–12 weeks historical data + live 30‑day window.</li>
+<li>Key activities by week:
+<ul>
+<li>Week 0–2: Project kick‑off, data mapping (Portal logs, caller analytics, CRM, billing, support), privacy &amp; legal checklist (GDPR). Identify success metrics and baseline.</li>
+<li>Week 3–5: Build and validate churn risk model (explainability layer), design ranked playbooks and templated communications; instrumentation for logging and A/B assignment.</li>
+<li>Week 6–8: Integrate prototype into PHMG Portal / CSM dashboard; run controlled rollout (auto emails + CSM escalations) to test cohort.</li>
+<li>Week 9–12: Measure outcomes, collect qualitative CSM feedback, iterate playbook content; prepare scale recommendation.</li>
+</ul>
+</li>
+<li>Team &amp; resources: Data engineer, ML engineer / data scientist, Product owner, 2 CSMs, Legal/Privacy, 1 Portal engineer, Analytics PM. Minimal infra: existing Portal + analytics exports.</li>
+<li>Guardrails: human‑in‑the‑loop for pricing/contract changes, explicit client consent for outreach, GDPR compliance, no auto‑deploy of creative without client sign‑off.</li>
+<li>Success criteria (90 days): model precision/recall acceptable (e.g., lift in observed churn risk &gt; baseline); increase in early renewals in test vs control by ≥10%; CSM time saved per at‑risk account measurable; playbook adoption ≥20%.</li>
+</ul>
+<ol start="5">
+<li>KPIs to Track</li>
+</ol>
+<ul>
+<li>Commercial / retention: annual client churn rate (%), net retention rate (%), retained revenue (£), number of early renewals within 90 days, upsell conversion rate (%).</li>
+<li>Adoption &amp; engagement: PHMG Portal activation % (30 days), Action Packs delivered per client/month, recommendation adoption rate (%).</li>
+<li>Operational: CSM time spent per at‑risk account (hrs), time to close renewal (days), MTTR for support tickets (hours), ticket re‑open rate (%).</li>
+<li>Financial / cash: incremental ARR from pilots/upsells (£), DSO (days) and invoice dispute rate (%).</li>
+</ul>
+<p>Next steps (recommended): greenlight 90‑day predictive churn pilot with data access approvals, nominate CSM &amp; technical leads, and confirm legal/privacy guardrails to begin Week 0 data mapping.</p>
+
+            </section>
+          </div>
+        </div>
+      </body>
+    </html>

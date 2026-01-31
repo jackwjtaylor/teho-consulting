@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <title>Opportunity Report – Full</title>
+        <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  color-scheme: light;
+  --bg: #e8e7e1;
+  --surface: #f4f2ed;
+  --surface-alt: #ffffff;
+  --border: #d7d3c6;
+  --text: #1f201e;
+  --muted: #596152;
+  --primary: #2b3625;
+  --primary-light: #3e4739;
+  --accent: #78957a;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 56px 0;
+  line-height: 1.7;
+}
+
+.report-page {
+  margin: 0 auto;
+  max-width: 920px;
+  padding: 0 28px 72px;
+}
+
+.report-card {
+  background: var(--surface-alt);
+  border-radius: 28px;
+  box-shadow: 0 28px 55px rgba(21, 25, 19, 0.16);
+  overflow: hidden;
+  border: 1px solid rgba(27, 30, 25, 0.08);
+}
+
+.report-hero {
+  background: linear-gradient(125deg, rgba(43, 54, 37, 0.92), rgba(120, 149, 122, 0.62));
+  color: #f8f7f3;
+  padding: 54px 56px 48px;
+  display: grid;
+  gap: 32px;
+}
+
+.report-hero__brand {
+  font-size: 18px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.78;
+}
+
+.report-hero__client {
+  font-size: 20px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.report-hero__title {
+  font-size: clamp(2.4rem, 4vw, 2.9rem);
+  font-weight: 700;
+  letter-spacing: 0.015em;
+  line-height: 1.1;
+}
+
+.report-hero__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px 32px;
+}
+
+.report-hero__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.report-hero__meta-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.report-hero__meta-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fefbf6;
+}
+
+.report-body {
+  padding: 48px 56px 60px;
+  display: grid;
+  gap: 32px;
+  font-size: 1.05rem;
+}
+
+.report-body h1 {
+  display: none;
+}
+
+.report-body h2 {
+  font-size: 1.6rem;
+  margin: 12px 0 6px;
+  padding: 18px 0 12px;
+  border-bottom: 2px solid rgba(43, 54, 37, 0.14);
+}
+
+.report-body h3 {
+  font-size: 1.25rem;
+  margin: 20px 0 8px;
+  color: var(--primary);
+}
+
+.report-body p {
+  margin: 0;
+  line-height: 1.78;
+}
+
+.report-body strong {
+  color: var(--primary);
+}
+
+.report-body a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(43, 54, 37, 0.35);
+}
+
+.report-body a:hover {
+  border-bottom-color: rgba(43, 54, 37, 0.65);
+}
+
+.report-body ul,
+.report-body ol {
+  margin: 0;
+  padding-left: 28px;
+  display: grid;
+  gap: 10px;
+}
+
+.report-body li {
+  line-height: 1.72;
+}
+
+.report-body table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 20px 0;
+  font-size: 0.98rem;
+  overflow-x: auto;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(43, 54, 37, 0.1);
+}
+
+.report-body thead {
+  background: rgba(43, 54, 37, 0.08);
+}
+
+.report-body th,
+.report-body td {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid rgba(43, 54, 37, 0.08);
+}
+
+.report-body tbody tr:nth-child(even) {
+  background: rgba(232, 231, 225, 0.35);
+}
+
+.report-body tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.report-body blockquote {
+  background: rgba(39, 50, 34, 0.08);
+  border-left: 4px solid rgba(43, 54, 37, 0.45);
+  padding: 18px 24px;
+  font-style: italic;
+  color: var(--primary);
+}
+
+.report-body hr {
+  border: none;
+  height: 1px;
+  background: rgba(43, 54, 37, 0.12);
+  margin: 12px 0 4px;
+}
+
+.summary-callout {
+  margin: 8px 0 12px;
+  padding: 24px 26px;
+  border-radius: 24px;
+  background: rgba(232, 231, 225, 0.75);
+  border: 1px solid rgba(43, 54, 37, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.summary-callout h3 {
+  margin: 0 0 12px;
+}
+
+.cta-banner {
+  margin-top: 8px;
+  padding: 24px 26px;
+  border-radius: 24px;
+  background: linear-gradient(120deg, rgba(43, 54, 37, 0.9), rgba(120, 149, 122, 0.58));
+  color: #f9f8f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cta-banner a {
+  color: #f9f8f4;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cta-banner__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 11px 20px;
+}
+
+@media (max-width: 780px) {
+  body {
+    padding: 32px 0;
+  }
+  .report-page {
+    padding: 0 18px 48px;
+  }
+  .report-hero {
+    padding: 40px 28px;
+  }
+  .report-body {
+    padding: 36px 28px 44px;
+    font-size: 1rem;
+  }
+}
+
+@media print {
+  @page {
+    margin: 18mm 15mm 22mm;
+  }
+  body {
+    background: #ffffff;
+    padding: 0;
+  }
+  .report-page {
+    max-width: 100%;
+    padding: 0 15mm 20mm;
+  }
+  .report-card {
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .report-hero {
+    padding: 28px 28px 24px;
+  }
+  .report-body {
+    padding: 32px 28px 40px;
+    font-size: 11pt;
+  }
+  .report-body h2 {
+    page-break-after: avoid;
+  }
+  .report-body table {
+    table-layout: fixed;
+    width: 100%;
+    font-size: 10pt;
+  }
+  .report-body th,
+  .report-body td {
+    word-break: break-word;
+    white-space: normal;
+  }
+  table {
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+}
+</style>
+      </head>
+      <body>
+        <div class="report-page">
+          <div class="report-card">
+            <header class="report-hero">
+              <div class="report-hero__brand">Teho Consulting</div>
+              <div class="report-hero__client">Tomoro.ai</div>
+              <div class="report-hero__title">Opportunity Report – Full</div>
+              <div class="report-hero__meta"><div class="report-hero__meta-item"><span class="report-hero__meta-label">Date</span><span class="report-hero__meta-value">2025-12-31</span></div><div class="report-hero__meta-item"><span class="report-hero__meta-label">Analyst</span><span class="report-hero__meta-value">Teho Consulting AI Advisory Team</span></div><div class="report-hero__meta-item"><span class="report-hero__meta-label">Business</span><span class="report-hero__meta-value">Tomoro.ai</span></div><div class="report-hero__meta-item"><span class="report-hero__meta-label">Report Depth</span><span class="report-hero__meta-value">Full</span></div></div>
+            </header>
+            <section class="report-body">
+              <h2>2. EXECUTIVE SUMMARY</h2>
+<p>Tomoro.ai is scaling quickly (company-reported quadrupling of headcount over the last year; ~130 people entering 2026) while delivering enterprise AI agents and infrastructure across multiple regions (UK, Singapore, Australia) and regulated sectors. With this growth profile, the highest-return AI automation opportunities are internal “delivery system” accelerators that (a) reduce cycle time from lead → NDA → discovery, (b) increase PoC → production conversion, and (c) harden reliability/safety with observability, regression testing, and faster incident root-cause analysis.</p>
+<p><strong>Recommended focus (next 90 days):</strong> implement a tightly-scoped set of quick wins that compound:</p>
+<ol>
+<li><strong>Inbound qualification agent + fast-track NDA</strong> to compress time-to-first-meeting and remove legal/admin friction.</li>
+<li><strong>Agent observability + behaviour regression tests</strong> to reduce engineering debug time and production regressions.</li>
+<li><strong>PoC-to-production NFR gate + cost/latency estimator</strong> to improve production readiness and prevent cost/latency surprises.</li>
+</ol>
+<p>These three form a coherent operating backbone: faster acquisition → more PoCs → higher production conversion → fewer incidents → improved renewals and referenceability.</p>
+<h2>3. COMPANY SNAPSHOT</h2>
+<p><strong>Legal name:</strong> Tomoro AI Ltd<br />
+<strong>Founded:</strong> 2023 (noted as “in alliance with OpenAI”)<br />
+<strong>Regions:</strong> London, Edinburgh, Singapore (APAC HQ), Sydney, Melbourne<br />
+<strong>Estimated headcount:</strong> 120–150 (company/LinkedIn signals indicate ~130 by end of 2025)</p>
+<p><strong>Offerings (public):</strong></p>
+<ul>
+<li>AI Business Strategy</li>
+<li>Custom AI Solutions</li>
+<li>Enterprise AI Infrastructure (architecture, evaluations capability, agentic frameworks, knowledge pipelines)</li>
+<li>Adoption and Rollout</li>
+<li>Example build: RT-GP1 (production-grade, brand-aligned, multi-modal virtual agent for Supercell’s Brawl Stars)</li>
+</ul>
+<p><strong>Client segments referenced:</strong> enterprise, highly regulated industries; financial services, energy, travel, pharma, consumer goods, gaming. Client references include Supercell, Virgin Atlantic, Fidelity, DPD, OakNorth Bank.</p>
+<h2>4. FINANCIAL SIGNALS</h2>
+<p><strong>Revenue / profitability:</strong> Not publicly disclosed.</p>
+<p><strong>Directional growth signals (public/company-reported):</strong></p>
+<ul>
+<li>Company statements/press coverage indicate <strong>monthly revenue increased more than tenfold</strong> in the 12 months after the May 2024 Scotland investment announcement, and again <strong>more than 10x</strong> in the year to late 2025 (no absolute baseline disclosed).</li>
+<li>International expansion (Singapore APAC HQ; Sydney/Melbourne offices) and multi-year workforce investment commitments indicate confidence in pipeline and cash-flow capacity, but underlying margins/burn are not assessable from public data.</li>
+</ul>
+<p><strong>Funding / capital structure:</strong> No public evidence of a disclosed venture/debt round; Companies House filings show share allotments/resolutions but do not disclose a round narrative or valuation.</p>
+<p><strong>Implication for AI opportunities:</strong> prioritise initiatives that:</p>
+<ul>
+<li>reduce delivery cost-to-serve (debug time, rework, PoC failures),</li>
+<li>shorten sales cycle time (NDA, security, discovery alignment), and</li>
+<li>improve reliability/safety (incident reduction) to protect renewals and enterprise referenceability.</li>
+</ul>
+<h2>5. RECENT DEVELOPMENTS</h2>
+<p><strong>Growth &amp; expansion</strong></p>
+<ul>
+<li>2025-05-29: Opened Asia-Pacific HQ in Singapore; plan to recruit 30+ local roles.</li>
+<li>2025-10-15: Reported opening offices in Sydney and Melbourne.</li>
+<li>2025-12-19: Opened new Edinburgh (Fountainbridge) office; announced <strong>£10m investment over three years</strong> in Scottish AI talent.</li>
+</ul>
+<p><strong>Product / R&amp;D</strong></p>
+<ul>
+<li>2025-12-05: Released <strong>Tomoro ColQwen3</strong> multimodal embedding models (open-weights, Apache 2.0) for end-to-end visual retrieval.</li>
+</ul>
+<p><strong>Customer launches</strong></p>
+<ul>
+<li>2025-12-08: Virgin Atlantic rolled out “Virgin Atlantic Concierge” built with Tomoro and powered by OpenAI.</li>
+</ul>
+<p><strong>Corporate filings (UK)</strong></p>
+<ul>
+<li>Share allotment-related resolutions/filings (2024-08 to 2025-06), confirmation statements (2024, 2025), accounts filed to 2025-03-31.</li>
+</ul>
+<h2>6. MARKET &amp; COMPETITOR CONTEXT</h2>
+<p>Tomoro competes in a crowded enterprise AI services market against large consultancies (Accenture, Deloitte, McKinsey/QuantumBlack, BCG X, Bain, Capgemini, Cognizant, IBM Consulting, PwC, Slalom). These peers increasingly package:</p>
+<ul>
+<li><strong>agentic AI accelerators</strong> (agent builders, reusable industry agents),</li>
+<li><strong>governed scaling</strong> (eval harnesses, responsible AI, security/compliance assets), and</li>
+<li><strong>delivery industrialisation</strong> (platform/tooling that reduces bespoke effort).</li>
+</ul>
+<p><strong>Differentiation opportunity for Tomoro:</strong> productise internal delivery capabilities that reliably ship production agents (observability, evals, NFR gates, knowledge pipelines) and turn them into repeatable, audit-ready delivery assets—especially for regulated clients and multi-region deployments.</p>
+<h2>7. PROBLEM &amp; PAIN-POINT MAP</h2>
+<p>Based on the provided process map, the most material constraints cluster around:</p>
+<p><strong>Acquire</strong></p>
+<ul>
+<li>Slow speed-to-lead (&gt;24h) and inconsistent scoring/routing</li>
+<li>NDA friction delaying discovery by 1–2 weeks</li>
+<li>Partner leads stalling due to unclear joint qualification criteria</li>
+</ul>
+<p><strong>Convert</strong></p>
+<ul>
+<li>Discovery scope creep and repeated ROI iterations</li>
+<li>Security reviews adding 4–12 weeks; data-access constraints blocking PoCs</li>
+<li>PoCs failing to scale due to missing non-functional requirements; cost/latency surprises</li>
+</ul>
+<p><strong>Fulfil</strong></p>
+<ul>
+<li>Slow data onboarding (4–8 weeks) and low retrieval relevance (&lt;70–80%)</li>
+<li>Agent behaviour drift and limited observability (30%+ time diagnosing)</li>
+<li>PoC→prod parity issues; SLA and cost overruns</li>
+</ul>
+<p><strong>Serve/Retain</strong></p>
+<ul>
+<li>Limited real-time monitoring; incidents hard to correlate to model/version/data</li>
+<li>Eval coverage gaps vs real conversations (&lt;60% intents)</li>
+</ul>
+<p><strong>Back-office</strong></p>
+<ul>
+<li>Utilisation volatility and estimation variance affecting margins</li>
+<li>Multi-region governance inconsistency</li>
+</ul>
+<h2>8. OPPORTUNITY MAP</h2>
+<p><strong>Quick wins (high impact, moderate effort):</strong></p>
+<ul>
+<li>Inbound qualification agent + fast-track NDA workflow</li>
+<li>Agent observability + prompt/behaviour regression testing</li>
+<li>PoC-to-production NFR gate + cost/latency estimator</li>
+<li>Discovery &amp; value-hypothesis copilot</li>
+<li>Incident correlation assistant</li>
+<li>AI-driven content-to-SQL routing + multi-touch attribution</li>
+</ul>
+<p><strong>Big bets (strategic platform plays):</strong></p>
+<ul>
+<li>Security/compliance pre-sales autopack</li>
+<li>Knowledge pipeline accelerator (connector factory + PII/relevance automation)</li>
+<li>Standardised eval harness + intent coverage builder</li>
+<li>Deployment parity automation + SLA load testing + spend guardrails</li>
+</ul>
+<p><strong>Fill-ins (useful, bounded impact):</strong></p>
+<ul>
+<li>Partner-led lead qualification copilot</li>
+<li>Adoption &amp; trust loop (override analytics + training refresh)</li>
+<li>Proposal/pricing configurator</li>
+<li>Multi-region resourcing &amp; utilisation forecaster</li>
+</ul>
+<h2>9. TOP 5 OPPORTUNITIES - DEEP DIVES</h2>
+<h3>9.1 Inbound qualification agent + fast-track NDA workflow</h3>
+<p><strong>Category:</strong> Acquire | Inbound handling &amp; qualification<br />
+<strong>Why now:</strong> international expansion increases inbound volume and routing complexity; regulated prospects amplify NDA and data-residency friction.</p>
+<p><strong>Pain points addressed</strong></p>
+<ul>
+<li>Speed-to-lead &gt;24h</li>
+<li>Rep time spent on low-fit inbound leads (&gt;20%)</li>
+<li>NDA delays (1–2 weeks) before meaningful discovery</li>
+</ul>
+<p><strong>Solution (mechanism)</strong></p>
+<ul>
+<li>A brand-aligned inbound agent on contact/referral flows that:
+<ol>
+<li>captures structured qualification (sector, use case, timeline, data sensitivity, region/sovereignty constraints),</li>
+<li>applies consistent lead scoring and routing to London/Edinburgh/Singapore/Sydney/Melbourne,</li>
+<li>triggers an <strong>NDA pack</strong> automatically (approved template selection + pre-fill + e-sign),</li>
+<li>books the next step (SDR/partner manager/solution lead) with context.</li>
+</ol>
+</li>
+</ul>
+<p><strong>Reference architecture (high-level)</strong></p>
+<ul>
+<li>Web widget / form assistant → Qualification schema → Scoring/routing service → CRM create/update</li>
+<li>NDA generator (template library + clause locks) → e-sign tool → status back to CRM</li>
+<li>Audit logs: what was captured, what was generated, and who approved exceptions</li>
+</ul>
+<p><strong>Data &amp; integrations (from provided prerequisites)</strong></p>
+<ul>
+<li>Website/contact forms, CRM, e-sign tool, calendar scheduling</li>
+<li>Approved NDA templates and clause library by region/client type</li>
+<li>Routing rules by office and practice leads</li>
+</ul>
+<p><strong>KPIs / expected uplift (provided ranges)</strong></p>
+<ul>
+<li>Speed-to-lead: <strong>&lt;1 hour</strong></li>
+<li>Time from first contact to NDA signed: <strong>-50–80%</strong></li>
+<li>Rep time on low-fit inbound leads: <strong>-15–30%</strong></li>
+</ul>
+<p><strong>Effort &amp; delivery approach</strong></p>
+<ul>
+<li>2–3 weeks: define qualification schema + routing rules + legal-approved template set</li>
+<li>3–6 weeks: implement v1 flows + CRM/e-sign integration</li>
+<li>6–10 weeks: add analytics, A/B tests, handoff SLAs, and exception routing to legal</li>
+</ul>
+<p><strong>Key guardrails (from provided list)</strong></p>
+<ul>
+<li>Data minimisation and explicit consent at intake</li>
+<li>“No legal advice” posture; non-standard NDA terms route to legal</li>
+<li>Harden against prompt injection/phishing; sanitize inputs; monitor anomalous submissions</li>
+</ul>
+<hr />
+<h3>9.2 Agent observability + prompt/behaviour regression testing for multi-agent orchestration and persona control</h3>
+<p><strong>Category:</strong> Fulfil | Agent/system build<br />
+<strong>Why now:</strong> Tomoro is shipping production agents (e.g., Virgin Atlantic Concierge; Supercell case study). Scaling production deployments makes drift, regressions, and debug time a structural margin and risk driver.</p>
+<p><strong>Pain points addressed</strong></p>
+<ul>
+<li>Behaviour drift and critical regressions (&gt;1 per sprint)</li>
+<li>Safety/brand alignment gaps (&gt;1% unsafe/brand-off in eval)</li>
+<li>Tooling immaturity causing &gt;30% time diagnosing runs</li>
+</ul>
+<p><strong>Solution (mechanism)</strong></p>
+<ul>
+<li>End-to-end tracing across agent steps (classifiers, retrieval, tool calls, persona control, response)</li>
+<li>Regression suite that diffs behaviour across prompt/model/workflow versions</li>
+<li>CI/CD release gates: block deploy on regression thresholds; auto-create tickets; enable rollback triggers</li>
+</ul>
+<p><strong>Data &amp; integrations</strong></p>
+<ul>
+<li>Agent runtime/orchestration framework; observability stack (logs/metrics/traces)</li>
+<li>CI/CD, issue tracker</li>
+<li>Representative test conversations and edge cases per client/agent</li>
+</ul>
+<p><strong>KPIs / expected uplift (provided ranges)</strong></p>
+<ul>
+<li>Critical regressions: <strong>-50–80%</strong></li>
+<li>Debugging time: <strong>-20–40%</strong></li>
+<li>Unsafe/brand-off outputs: <strong>-30–60%</strong></li>
+</ul>
+<p><strong>Implementation notes (pragmatic choices)</strong></p>
+<ul>
+<li>Start “metadata-first” tracing; enable redactable payload capture only where contracts permit</li>
+<li>Standardise a minimal trace schema usable across all projects (conversation ID, versions, tools called, retrieval stats, policy outcomes)</li>
+</ul>
+<p><strong>Key guardrails</strong></p>
+<ul>
+<li>Redacted/structured traces by default; configurable sampling and retention</li>
+<li>Per-client/environment segregation of telemetry; region-specific log sinks where required</li>
+<li>Protect system prompts/tooling artifacts; strict RBAC and audited access</li>
+</ul>
+<hr />
+<h3>9.3 PoC-to-production non-functional requirements (NFR) gate + cost/latency estimator</h3>
+<p><strong>Category:</strong> Convert | Pilot/PoC execution &amp; evaluation<br />
+<strong>Why now:</strong> PoC→production drop-off (&gt;30%) and inference cost variance (&gt;2x) directly damage both revenue conversion and delivery margin.</p>
+<p><strong>Pain points addressed</strong></p>
+<ul>
+<li>Missing non-functional requirements (SLAs, privacy/safety, monitoring) causing PoCs not to scale</li>
+<li>Latency/cost surprises for multi-modal/agentic flows</li>
+<li>Inconsistent go/no-go evaluation outputs</li>
+</ul>
+<p><strong>Solution (mechanism)</strong></p>
+<ul>
+<li>A standard <strong>NFR gate</strong> embedded into PoC governance:
+<ul>
+<li>captures required SLAs (p95 latency, throughput, availability),</li>
+<li>defines safety/privacy requirements and monitoring,</li>
+<li>outputs a production-readiness checklist and sign-off artifact.</li>
+</ul>
+</li>
+<li>A cost/latency estimator calibrated from PoC traces + forecast usage scenarios.</li>
+</ul>
+<p><strong>Data &amp; integrations</strong></p>
+<ul>
+<li>PoC telemetry/traces (latency, token usage, tool calls)</li>
+<li>Evals/benchmarking tooling; OpenTelemetry-compatible observability</li>
+<li>Project tracking tooling</li>
+</ul>
+<p><strong>KPIs / expected uplift (provided ranges)</strong></p>
+<ul>
+<li>PoC→prod failures: <strong>-30–60%</strong></li>
+<li>Deployment blockers per release: <strong>-1–2</strong></li>
+<li>Cost variance vs estimate: <strong>-50%</strong></li>
+</ul>
+<p><strong>Guardrails</strong></p>
+<ul>
+<li>Redact/treat telemetry as sensitive; per-client storage and short retention</li>
+<li>Estimator outputs include assumptions + confidence intervals; not a guarantee</li>
+<li>Safe load testing: staging-first, throttles, kill switches, client approvals</li>
+</ul>
+<hr />
+<h3>9.4 Discovery &amp; value-hypothesis copilot to lock success criteria and ROI earlier</h3>
+<p><strong>Category:</strong> Convert | Discovery &amp; use-case selection<br />
+<strong>Why now:</strong> as Tomoro scales across regions and sectors, discovery quality becomes the main determinant of conversion efficiency and downstream rework.</p>
+<p><strong>Pain points addressed</strong></p>
+<ul>
+<li>Scope creep and unclear success criteria (&gt;30% change requests pre-SOW)</li>
+<li>Multiple ROI iterations (&gt;50% deals)</li>
+<li>Stakeholder misalignment across IT/security/business</li>
+</ul>
+<p><strong>Solution (mechanism)</strong></p>
+<ul>
+<li>Capture workshop notes/transcripts (where approved) and generate:
+<ul>
+<li>a structured value hypothesis (scope, measurable success criteria, assumptions),</li>
+<li>ROI model using standard input templates for regulated workflows,</li>
+<li>stakeholder alignment memo with decisions, open questions, and risks,</li>
+<li>change-request impact summary for pre-SOW governance.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Data &amp; integrations</strong></p>
+<ul>
+<li>Meeting transcription tool, document workspace, CRM</li>
+<li>ROI templates and solution pattern catalog (RAG, multi-agent, persona control, infra options)</li>
+</ul>
+<p><strong>KPIs / expected uplift (provided ranges)</strong></p>
+<ul>
+<li>Pre-SOW change requests: <strong>-20–40%</strong></li>
+<li>ROI iterations: <strong>-1 per deal</strong></li>
+<li>Re-scope cycles: <strong>-1 per deal</strong></li>
+</ul>
+<p><strong>Guardrails</strong></p>
+<ul>
+<li>“Derived notes by default”: do not store raw transcripts unless explicitly approved</li>
+<li>Human review before sharing externally; assumption register with sources</li>
+<li>Recording consent and region-aware processing controls</li>
+</ul>
+<hr />
+<h3>9.5 Incident correlation assistant: link hallucinations/safety incidents to model/version/data changes</h3>
+<p><strong>Category:</strong> Serve/Retain | Monitoring, incident response &amp; SLA management<br />
+<strong>Why now:</strong> production deployments increase the likelihood of high-visibility incidents. Faster root-cause reduces SLA risk and protects renewals.</p>
+<p><strong>Pain points addressed</strong></p>
+<ul>
+<li>MTTR &gt;4 hours; root cause identification taking &gt;2 days</li>
+<li>Repeat defects (same category &gt;2 times/quarter)</li>
+<li>Difficulty correlating issues to model/version/data changes</li>
+</ul>
+<p><strong>Solution (mechanism)</strong></p>
+<ul>
+<li>On escalation, automatically assemble an incident packet:
+<ul>
+<li>execution trace summary (retrieval sources, tool calls),</li>
+<li>model/prompt/version + knowledge index version,</li>
+<li>diffs vs last known-good release,</li>
+<li>recommended remediation options (data fix, prompt update, guardrail tweak) with confidence.</li>
+</ul>
+</li>
+<li>Generate postmortem template and learning items.</li>
+</ul>
+<p><strong>Data &amp; integrations</strong></p>
+<ul>
+<li>Alerting/on-call system, observability stack</li>
+<li>Model/prompt/version registry; knowledge index versioning and ingestion logs</li>
+<li>Issue tracker and postmortem docs</li>
+</ul>
+<p><strong>KPIs / expected uplift (provided ranges)</strong></p>
+<ul>
+<li>MTTR: <strong>-30–60%</strong></li>
+<li>Root-cause time: <strong>-1–2 days</strong></li>
+<li>Repeat incidents: <strong>-20–40%</strong></li>
+</ul>
+<p><strong>Guardrails</strong></p>
+<ul>
+<li>Need-to-know RBAC with audited, time-bound break-glass access</li>
+<li>Keep data in-region per client where required; prefer pointers to source systems over copying content</li>
+<li>Recommendations are advisory; engineer approval required before changes</li>
+</ul>
+<h2>10. VALUE SUMMARY TABLE</h2>
+<table>
+<thead>
+<tr>
+<th>Opportunity</th>
+<th style="text-align:right">Impact/Effort</th>
+<th style="text-align:right">Value range (annualised)</th>
+<th>Primary KPIs</th>
+<th>Core dependencies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inbound qualification agent + fast-track NDA</td>
+<td style="text-align:right">H / M</td>
+<td style="text-align:right">£100k–£600k</td>
+<td>speed-to-lead; time-to-NDA-sign; routing automation rate</td>
+<td>CRM + e-sign + calendar; NDA templates; routing rules</td>
+</tr>
+<tr>
+<td>Agent observability + regression testing</td>
+<td style="text-align:right">H / M</td>
+<td style="text-align:right">£200k–£1.3m</td>
+<td>regressions/sprint; debugging time; unsafe/brand-off rate; MTTR</td>
+<td>trace schema; CI gates; per-client telemetry segregation</td>
+</tr>
+<tr>
+<td>PoC→prod NFR gate + cost/latency estimator</td>
+<td style="text-align:right">H / M</td>
+<td style="text-align:right">£200k–£1.0m</td>
+<td>PoC→prod rate; blockers/release; estimate vs actual spend</td>
+<td>PoC traces; NFR templates; load-test discipline</td>
+</tr>
+<tr>
+<td>Discovery &amp; ROI copilot</td>
+<td style="text-align:right">H / M</td>
+<td style="text-align:right">£150k–£800k</td>
+<td>change requests pre-SOW; ROI iterations; time to success criteria</td>
+<td>transcription/notes approvals; ROI templates; doc workflow</td>
+</tr>
+<tr>
+<td>Incident correlation assistant</td>
+<td style="text-align:right">H / M</td>
+<td style="text-align:right">£200k–£1.4m</td>
+<td>MTTR; root-cause time; repeat incidents</td>
+<td>version registry + index versioning; observability + incident tooling</td>
+</tr>
+</tbody>
+</table>
+<h2>11. PRIORITISED BACKLOG (ICE)</h2>
+<p>Scores are provided in the input (Impact, Confidence, Effort; ICE score shown).</p>
+<ol>
+<li><strong>Inbound qualification agent + fast-track NDA workflow</strong> (Score <strong>12.8</strong>) — Impact 8 / Confidence 8 / Effort 5</li>
+<li><strong>Agent observability + prompt/behaviour regression testing</strong> (Score <strong>12.8</strong>) — 8 / 8 / 5</li>
+<li><strong>PoC-to-production NFR gate + cost/latency estimator</strong> (Score <strong>11.2</strong>) — 8 / 7 / 5</li>
+<li><strong>Discovery &amp; value-hypothesis copilot</strong> (Score <strong>11.2</strong>) — 8 / 7 / 5</li>
+<li><strong>Incident correlation assistant</strong> (Score <strong>9.8</strong>) — 7 / 7 / 5</li>
+<li>AI-driven content-to-SQL routing + attribution (Score 9.6)</li>
+<li>Partner-led lead qualification copilot (Score 8.4)</li>
+<li>Adoption &amp; trust loop (Score 8.4)</li>
+<li>Proposal/pricing configurator (Score 7.2)</li>
+<li>Multi-region resourcing/utilisation forecaster (Score 7.2)</li>
+<li>Security/compliance pre-sales autopack (Score 6.75)</li>
+<li>Knowledge pipeline accelerator (Score 6.75)</li>
+<li>Standardised eval harness + intent coverage (Score 6.0)</li>
+<li>Deployment parity + load testing + spend guardrails (Score 6.0)</li>
+</ol>
+<h2>12. 90-DAY PILOT PLAN</h2>
+<p>A practical 90-day plan that delivers measurable results without requiring “big bet” platform rebuilds.</p>
+<h3>Pilot scope (recommended)</h3>
+<p>Run <strong>two parallel tracks</strong>:</p>
+<ul>
+<li><strong>Track A (Commercial ops):</strong> Inbound qualification agent + fast-track NDA</li>
+<li><strong>Track B (Delivery reliability):</strong> Agent observability + regression tests, plus NFR gate (lightweight v1)</li>
+</ul>
+<h3>Weeks 1–2: Align &amp; design</h3>
+<ul>
+<li>Confirm success metrics and baselines:
+<ul>
+<li>inbound response time, time-to-NDA-sign, % routed correctly</li>
+<li>regressions/sprint, debug time, MTTR</li>
+<li>PoC→prod rate and current NFR capture rate</li>
+</ul>
+</li>
+<li>Legal + security approvals:
+<ul>
+<li>NDA template set + exception workflow</li>
+<li>telemetry fields allowed, redaction rules, retention windows</li>
+</ul>
+</li>
+<li>Define minimal common schemas:
+<ul>
+<li>Qualification schema + routing rules</li>
+<li>Trace schema + version identifiers</li>
+<li>NFR checklist template</li>
+</ul>
+</li>
+</ul>
+<h3>Weeks 3–6: Build v1 and instrument</h3>
+<ul>
+<li>Track A:
+<ul>
+<li>Deploy inbound agent on a limited entry point (e.g., “Contact us”)</li>
+<li>Integrate CRM + calendar; add e-sign NDA generation</li>
+<li>Add human handoff rules (regulated/complex routes to senior owner)</li>
+</ul>
+</li>
+<li>Track B:
+<ul>
+<li>Implement tracing in one flagship agent workflow (representative multi-step flow)</li>
+<li>Create an initial regression suite (top intents + safety/brand checks)</li>
+<li>Add CI gate for regression thresholds</li>
+<li>Implement NFR gate as a required artifact for new PoCs (template + workflow)</li>
+</ul>
+</li>
+</ul>
+<h3>Weeks 7–10: Expand, harden, and measure</h3>
+<ul>
+<li>Expand inbound agent to referrals/partner landing pages; add routing QA and exception analytics</li>
+<li>Improve observability dashboards and automated ticket creation</li>
+<li>Calibrate cost/latency estimator using collected traces; introduce confidence intervals</li>
+</ul>
+<h3>Weeks 11–13: Operationalise</h3>
+<ul>
+<li>Publish playbooks and runbooks:
+<ul>
+<li>inbound lead handling and legal escalation</li>
+<li>release gating, rollback, and incident triage</li>
+</ul>
+</li>
+<li>Executive readout:
+<ul>
+<li>quantified cycle-time improvements and reliability gains</li>
+<li>backlog for next quarter (security autopack, connector factory, eval harness)</li>
+</ul>
+</li>
+</ul>
+<h2>13. RISKS &amp; MITIGATIONS</h2>
+<p>Consolidated from the provided guardrails, focusing on what is most likely to block or slow delivery.</p>
+<p><strong>1) Privacy, consent, and data minimisation (inbound + analytics + tracing)</strong></p>
+<ul>
+<li>Risk: collecting/storing unnecessary PII; cross-border processing.</li>
+<li>Mitigation: minimal intake fields; explicit consent; region-aware processing; redaction-by-default; short retention; tenant segregation; DPAs/SCCs/IDTA where applicable.</li>
+</ul>
+<p><strong>2) Legal accuracy and template governance (NDA automation)</strong></p>
+<ul>
+<li>Risk: wrong jurisdiction/template; perceived legal advice.</li>
+<li>Mitigation: approved template library only; clause locks; non-standard routing to legal; versioning and audit trail.</li>
+</ul>
+<p><strong>3) Observability data sensitivity (system prompts, intermediate steps)</strong></p>
+<ul>
+<li>Risk: leaking sensitive prompts/tools or confidential retrieved content.</li>
+<li>Mitigation: metadata-first tracing; protect prompt artifacts; strict RBAC; “no-content logging” option; audited access.</li>
+</ul>
+<p><strong>4) Over-reliance on AI outputs (ROI, estimates, root-cause suggestions)</strong></p>
+<ul>
+<li>Risk: outputs treated as commitments; wrong recommendations.</li>
+<li>Mitigation: human approval gates; assumption register; confidence intervals; advisory-only recommendations; change-management controls.</li>
+</ul>
+<p><strong>5) Multi-region operational consistency</strong></p>
+<ul>
+<li>Risk: different standards across London/Edinburgh/APAC hubs.</li>
+<li>Mitigation: shared schemas (qualification, traces, NFRs); central policy library; region-specific storage and access controls.</li>
+</ul>
+<h2>14. APPENDIX</h2>
+<h3>A. Source references (provided)</h3>
+<ul>
+<li>Tomoro site, insights, case studies; privacy policy; careers</li>
+<li>Singapore EDB announcement (APAC HQ)</li>
+<li>Virgin Atlantic press release (Concierge rollout)</li>
+<li>DIGIT report (Australia expansion)</li>
+<li>Companies House filing history (share allotments, accounts, confirmation statements)</li>
+<li>Tomoro ColQwen3 release (multimodal embeddings)</li>
+</ul>
+<h3>B. Notes on financials</h3>
+<ul>
+<li>Public absolute revenue, profitability, and margin data are not disclosed. Growth signals are based on company/press statements and expansion commitments.</li>
+</ul>
+<h3>C. How to use this report</h3>
+<ul>
+<li>Treat “value ranges” as directional until baselines are confirmed.</li>
+<li>Start with quick wins that create reusable assets (schemas, trace/version discipline, governance gates) that unlock the larger “big bet” platforms later.</li>
+</ul>
+
+            </section>
+          </div>
+        </div>
+      </body>
+    </html>

@@ -1,0 +1,27 @@
+Subject: 5 quick GenAI opportunities for Lloyds Bank (CX + compliance + risk)
+
+Hi [First Name],
+
+I put together a short snapshot of where GenAI/agentic workflows could deliver near-term impact at Lloyds Bank—focused on reducing service load, speeding compliant content, and tightening decisioning quality.
+
+
+Top 5 opportunities:
+1) Secure messaging triage + GenAI response drafting to improve FCR and reduce backlog
+2) GenAI “copy-to-compliance” accelerator for offers, product pages and disclosures
+3) Eligibility-to-underwriting consistency monitor (reducing false positives/negatives)
+4) Activation + PIN reminder “friction buster” (in-app agent + contact-centre assist)
+5) Agentic application form assistant + automated field validation (incl. accessibility support)
+
+If helpful, I can share a fuller preview with example workflows, guardrails, and where we’ve seen measurable outcomes in UK financial services.
+
+Full preview: [FULL_REPORT_PREVIEW_LINK]
+
+Open to a quick 20 minutes next week to sense-check which 1–2 are most relevant for your priorities?
+
+Calendar: https://calendly.com/teho-jack/lloyds-bank-credit-cards
+
+Best regards,
+[Your Name]
+[Title]
+[Company]
+[Phone]

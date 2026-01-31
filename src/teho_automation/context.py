@@ -5,7 +5,7 @@ from __future__ import annotations
 import datetime as dt
 import csv
 from pathlib import Path
-from typing import List, Optional
+from typing import Iterable, List, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, ValidationError
 
@@ -59,6 +59,12 @@ class CompanyContext(BaseModel):
     researcher_notes: Optional[str] = None
     primary_contact: Optional[str] = None
     primary_email: Optional[str] = None
+    persona_focus: Optional[str] = None
+    engagement_goal: Optional[str] = None
+    market_spotlight: Optional[str] = None
+    customer_voice_highlights: List[str] = Field(default_factory=list)
+    competitor_signals: List[str] = Field(default_factory=list)
+    regulatory_watch: List[str] = Field(default_factory=list)
 
     def missing_fields(self) -> List[str]:
         """Return context keys that are empty or None."""
@@ -119,3 +125,39 @@ def load_sources(path: str) -> List[SourceEntry]:
                 continue
             entries.append(entry)
     return entries
+
+
+def save_context(path: str, context: CompanyContext) -> None:
+    file_path = Path(path)
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+    file_path.write_text(context.model_dump_json(indent=2), encoding="utf-8")
+
+
+def append_sources(path: str, entries: Iterable[SourceEntry]) -> None:
+    file_path = Path(path)
+    existing = load_sources(str(file_path))
+    existing_ids = {entry.id for entry in existing}
+    new_entries = [entry for entry in entries if entry.id and entry.id not in existing_ids]
+    if not new_entries:
+        return
+    combined = existing + new_entries
+    _write_sources(file_path, combined)
+
+
+def _write_sources(path: Path, entries: List[SourceEntry]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        fieldnames = ["id", "title", "url", "retrieved", "summary", "confidence"]
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        for entry in entries:
+            writer.writerow(
+                {
+                    "id": entry.id,
+                    "title": entry.title,
+                    "url": str(entry.url),
+                    "retrieved": entry.retrieved,
+                    "summary": entry.summary or "",
+                    "confidence": entry.confidence,
+                }
+            )

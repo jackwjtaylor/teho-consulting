@@ -1,0 +1,42 @@
+[
+  {
+    "name": "AI Service Desk Triage",
+    "process_stage": "Serve & Retain",
+    "when_to_use": "Customer service teams handling >5k contacts/month with high email/chat backlog.",
+    "mechanism": "LLM copilot drafts responses, routes intents, and escalates edge cases with guardrails.",
+    "evidence": "UK telco cut average handle time 32% and reduced escalations 18% after introducing supervised LLM triage.",
+    "metrics": ["Average handle time", "First contact resolution", "Cost per ticket"]
+  },
+  {
+    "name": "AI Revenue Playbook",
+    "process_stage": "Convert",
+    "when_to_use": "Sales teams managing 1k+ open opportunities with stale CRM hygiene.",
+    "mechanism": "Generate weekly pipeline briefs, surface at-risk deals, and draft outreach nudges off call transcripts.",
+    "evidence": "Mid-market SaaS provider improved conversion 6–8 percentage points by automating follow-ups.",
+    "metrics": ["Conversion rate", "Pipeline velocity", "Time-to-follow-up"]
+  },
+  {
+    "name": "Predictive Ops Control Tower",
+    "process_stage": "Fulfil",
+    "when_to_use": "Operational teams with multi-step fulfilment, frequent delays, or quality variance.",
+    "mechanism": "Blend demand forecasts, logistics data, and quality signals; push alerts when thresholds breach.",
+    "evidence": "Grocery e-commerce player shaved 12% off stockouts and 9% off delivery refunds using anomaly alerts.",
+    "metrics": ["On-time fulfilment", "Refund rate", "Labour utilisation"]
+  },
+  {
+    "name": "AI Risk & Compliance Monitor",
+    "process_stage": "Back-office",
+    "when_to_use": "Regulated firms with manual policy reviews or monthly board reporting crunches.",
+    "mechanism": "LLM agents parse policy updates, summarise obligations, and draft board-ready compliance notes.",
+    "evidence": "UK fintech reduced policy review cycles from 4 weeks to 3 days with supervised summarisation.",
+    "metrics": ["Review cycle time", "Policy adherence incidents", "Audit findings"]
+  },
+  {
+    "name": "Voice of Customer Insight Engine",
+    "process_stage": "Serve & Retain",
+    "when_to_use": "Brands collecting large volumes of reviews/NPS but lacking root-cause analysis.",
+    "mechanism": "Cluster feedback, quantify themes, and link pain points to process owners with supporting quotes.",
+    "evidence": "Retailer boosted NPS 11 points by actioning AI-prioritised defects within 60 days.",
+    "metrics": ["NPS", "Churn rate", "Issue recurrence"]
+  }
+]

@@ -16,11 +16,21 @@
 - [x] Add follow-up radar + manual outreach logging so `/admin` covers the outreach funnel.
 - [x] Add direct automation API routes + buttons so `/admin` can invoke the CLI immediately (configure `TEHO_CLI_PATH`).
 - [x] Add portal access manager (list Supabase auth users + assign client slugs/roles).
+- [x] Add “Run full job” button per request so the entire pipeline (collect → generate → package) runs from `/admin`.
+- [x] Chain full-job automation to generate summary+full, package snapshot, and upload the email draft with a single queue action.
+- [x] Surface Supabase-hosted HTML/TXT via inline viewer so QA assets open with styling, and auto-fill outreach composer with the latest email draft.
+- [x] Integrate Companies House enrichment into the automation pipeline (context updates, filings JSON, sources.csv entry).
+- [x] Add portal-side automation queue controls (clear completed runs, show live asset links after uploads).
+- [x] Upgrade report research workflow to McKinsey/Bain-grade quality (source-backed, executive-ready) using the new master prompt.
+- [x] Build data ingestion checklist + scripts to gather Company Snapshot, Recent Developments, Peer Benchmarks, and Sector KPIs for each briefing.
+- [x] Implement citation management (S#/N#/B# tagging) across prompts and output validation.
+- [x] Enhance automation CLI to assemble value chain, pain points, and opportunity scoring in line with the master instruction.
+- [ ] Add QA gate ensuring Executive Summary and Opportunity Portfolio meet the new standard before outreach.
 
 ## Lined up next
 
 - [x] Implement caching + retry layer for collectors (JSON/SQLite TTL 7 days, tenacity retries, asyncio parallelism).  
-- [ ] Integrate Companies House API (filings, revenue, ownership) and evaluate News/headline APIs; wire results into context schema.  
+- [x] Integrate Companies House API (filings, revenue, ownership) and evaluate News/headline APIs; wire results into context schema.  
 - [ ] Add contact enrichment workflow (email pattern heuristics + first API provider such as Hunter/Clearbit) with confidence flags in `context.json`.  
 - [ ] Create a GitHub Action/cron job to run `teho process-queue` (document secrets setup).  
 - [ ] Choose interim orchestration (cron vs GitHub Actions) and document upgrade triggers for Prefect/Temporal.  
@@ -31,6 +41,7 @@
 - [ ] Define pricing & payment flow for full briefing unlocks and advisory services (invoice, Stripe, etc.).  
 - [ ] Draft customer-facing email templates (snapshot delivery, full briefing upsell, call follow-up).
 - [ ] Invest in richer PDF branding (cover page, footer, page numbers once logo/brand kit lands).
+- [ ] Auto-expire completed automation runs (cron or Supabase function) so the queue stays under control without manual trims.
 
 ## Already done
 

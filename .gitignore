@@ -16,3 +16,6 @@ __pycache__/
 .env
 *.local
 landing/config.js
+.env
+agent-runner/client_secrets.json
+agent-runner/drive_token.json

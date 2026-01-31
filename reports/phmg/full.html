@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <title>Opportunity Report – Full</title>
+        <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  color-scheme: light;
+  --bg: #e8e7e1;
+  --surface: #f4f2ed;
+  --surface-alt: #ffffff;
+  --border: #d7d3c6;
+  --text: #1f201e;
+  --muted: #596152;
+  --primary: #2b3625;
+  --primary-light: #3e4739;
+  --accent: #78957a;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 56px 0;
+  line-height: 1.7;
+}
+
+.report-page {
+  margin: 0 auto;
+  max-width: 920px;
+  padding: 0 28px 72px;
+}
+
+.report-card {
+  background: var(--surface-alt);
+  border-radius: 28px;
+  box-shadow: 0 28px 55px rgba(21, 25, 19, 0.16);
+  overflow: hidden;
+  border: 1px solid rgba(27, 30, 25, 0.08);
+}
+
+.report-hero {
+  background: linear-gradient(125deg, rgba(43, 54, 37, 0.92), rgba(120, 149, 122, 0.62));
+  color: #f8f7f3;
+  padding: 54px 56px 48px;
+  display: grid;
+  gap: 32px;
+}
+
+.report-hero__brand {
+  font-size: 18px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.78;
+}
+
+.report-hero__client {
+  font-size: 20px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.report-hero__title {
+  font-size: clamp(2.4rem, 4vw, 2.9rem);
+  font-weight: 700;
+  letter-spacing: 0.015em;
+  line-height: 1.1;
+}
+
+.report-hero__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px 32px;
+}
+
+.report-hero__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.report-hero__meta-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.report-hero__meta-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fefbf6;
+}
+
+.report-body {
+  padding: 48px 56px 60px;
+  display: grid;
+  gap: 32px;
+  font-size: 1.05rem;
+}
+
+.report-body h1 {
+  display: none;
+}
+
+.report-body h2 {
+  font-size: 1.6rem;
+  margin: 12px 0 6px;
+  padding: 18px 0 12px;
+  border-bottom: 2px solid rgba(43, 54, 37, 0.14);
+}
+
+.report-body h3 {
+  font-size: 1.25rem;
+  margin: 20px 0 8px;
+  color: var(--primary);
+}
+
+.report-body p {
+  margin: 0;
+  line-height: 1.78;
+}
+
+.report-body strong {
+  color: var(--primary);
+}
+
+.report-body a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(43, 54, 37, 0.35);
+}
+
+.report-body a:hover {
+  border-bottom-color: rgba(43, 54, 37, 0.65);
+}
+
+.report-body ul,
+.report-body ol {
+  margin: 0;
+  padding-left: 28px;
+  display: grid;
+  gap: 10px;
+}
+
+.report-body li {
+  line-height: 1.72;
+}
+
+.report-body table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 20px 0;
+  font-size: 0.98rem;
+  overflow-x: auto;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(43, 54, 37, 0.1);
+}
+
+.report-body thead {
+  background: rgba(43, 54, 37, 0.08);
+}
+
+.report-body th,
+.report-body td {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid rgba(43, 54, 37, 0.08);
+}
+
+.report-body tbody tr:nth-child(even) {
+  background: rgba(232, 231, 225, 0.35);
+}
+
+.report-body tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.report-body blockquote {
+  background: rgba(39, 50, 34, 0.08);
+  border-left: 4px solid rgba(43, 54, 37, 0.45);
+  padding: 18px 24px;
+  font-style: italic;
+  color: var(--primary);
+}
+
+.report-body hr {
+  border: none;
+  height: 1px;
+  background: rgba(43, 54, 37, 0.12);
+  margin: 12px 0 4px;
+}
+
+.summary-callout {
+  margin: 8px 0 12px;
+  padding: 24px 26px;
+  border-radius: 24px;
+  background: rgba(232, 231, 225, 0.75);
+  border: 1px solid rgba(43, 54, 37, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.summary-callout h3 {
+  margin: 0 0 12px;
+}
+
+.cta-banner {
+  margin-top: 8px;
+  padding: 24px 26px;
+  border-radius: 24px;
+  background: linear-gradient(120deg, rgba(43, 54, 37, 0.9), rgba(120, 149, 122, 0.58));
+  color: #f9f8f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cta-banner a {
+  color: #f9f8f4;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cta-banner__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 11px 20px;
+}
+
+@media (max-width: 780px) {
+  body {
+    padding: 32px 0;
+  }
+  .report-page {
+    padding: 0 18px 48px;
+  }
+  .report-hero {
+    padding: 40px 28px;
+  }
+  .report-body {
+    padding: 36px 28px 44px;
+    font-size: 1rem;
+  }
+}
+
+@media print {
+  @page {
+    margin: 18mm 15mm 22mm;
+  }
+  body {
+    background: #ffffff;
+    padding: 0;
+  }
+  .report-page {
+    max-width: 100%;
+    padding: 0 15mm 20mm;
+  }
+  .report-card {
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .report-hero {
+    padding: 28px 28px 24px;
+  }
+  .report-body {
+    padding: 32px 28px 40px;
+    font-size: 11pt;
+  }
+  .report-body h2 {
+    page-break-after: avoid;
+  }
+  .report-body table {
+    table-layout: fixed;
+    width: 100%;
+    font-size: 10pt;
+  }
+  .report-body th,
+  .report-body td {
+    word-break: break-word;
+    white-space: normal;
+  }
+  table {
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+}
+</style>
+      </head>
+      <body>
+        <div class="report-page">
+          <div class="report-card">
+            <header class="report-hero">
+              <div class="report-hero__brand">Teho Consulting</div>
+              <div class="report-hero__client">PHMG</div>
+              <div class="report-hero__title">Opportunity Report – Full</div>
+              <div class="report-hero__meta"><div class="report-hero__meta-item"><span class="report-hero__meta-label">Date</span><span class="report-hero__meta-value">2024-04-27</span></div><div class="report-hero__meta-item"><span class="report-hero__meta-label">Analyst</span><span class="report-hero__meta-value">Teho Consulting AI Advisory Team</span></div><div class="report-hero__meta-item"><span class="report-hero__meta-label">Business</span><span class="report-hero__meta-value">PHMG</span></div><div class="report-hero__meta-item"><span class="report-hero__meta-label">Report Depth</span><span class="report-hero__meta-value">Full</span></div></div>
+            </header>
+            <section class="report-body">
+              <h2>Executive Summary</h2>
+<p>PHMG currently operates with limited publicly available information, creating a significant data gap that constrains a fully tailored AI strategy. Despite this, our analysis identifies multiple AI-driven opportunities across efficiency, customer experience, risk management, and revenue growth. These opportunities leverage common industry AI applications adaptable to PHMG’s unknown sector and scale, pending further data validation.</p>
+<p>Key recommendations include immediate focus on AI-powered customer insights and automation of routine processes, which promise quick wins with moderate effort. Medium-term initiatives target advanced predictive analytics and personalised marketing, while longer-term bets explore AI-driven innovation in product/service development and risk mitigation frameworks.</p>
+<p>This report outlines eight AI opportunities, scored by impact and effort, and provides five detailed deep dives. Competitor and industry analysis highlights whitespace for PHMG to differentiate through AI adoption. A phased implementation timeline balances rapid value capture with strategic investment.</p>
+<p>To refine and prioritise these recommendations, Teho Consulting proposes a discovery engagement with PHMG leadership to fill critical data gaps, including company profile, operating model, data assets, and regulatory context.</p>
+<h2>Company &amp; Process Overview</h2>
+<p>PHMG’s business profile remains largely unknown, with no public data on headquarters, industry sector, revenue, headcount, ownership, or product/service portfolio. This absence of foundational information represents a significant data gap that limits precise AI opportunity targeting.</p>
+<p><strong>Knowns:</strong></p>
+<ul>
+<li>Primary outreach contact: Gareth Watt</li>
+<li>No public website or detailed company description available</li>
+</ul>
+<p><strong>Data gaps and next steps:</strong></p>
+<ul>
+<li>Identify PHMG’s industry sector and core business functions through direct engagement or third-party databases (e.g., Dun &amp; Bradstreet, Orbis).</li>
+<li>Map PHMG’s operating model, including key processes, customer segments, and technology stack.</li>
+<li>Assess existing data assets, including CRM, ERP, customer interaction logs, and digital channels.</li>
+<li>Clarify regulatory environment relevant to PHMG’s sector (e.g., GDPR, industry-specific compliance).</li>
+</ul>
+<p><strong>Next research step:</strong> Arrange interviews with PHMG’s leadership and IT teams to gather operational and data infrastructure details.</p>
+<h2>Pain-Point Scan</h2>
+<p>Due to the lack of internal data or external reporting, PHMG’s specific pain points are unknown. However, common challenges faced by companies in digital transformation and AI adoption include:</p>
+<ul>
+<li>Inefficient manual processes leading to high operational costs</li>
+<li>Limited customer insight and engagement capabilities</li>
+<li>Difficulty in forecasting demand or managing risk</li>
+<li>Underutilised data assets and fragmented technology environments</li>
+<li>Compliance and data privacy risks in AI deployment</li>
+</ul>
+<p><strong>Assumptions:</strong></p>
+<ul>
+<li>PHMG likely experiences some degree of operational inefficiency and customer engagement challenges, as these are widespread issues.</li>
+<li>Data silos and lack of AI maturity may hinder innovation and competitive agility.</li>
+</ul>
+<p><strong>Next research step:</strong> Conduct internal workshops or surveys to identify PHMG’s pain points and validate these assumptions.</p>
+<h2>Opportunity Table (Impact vs Effort)</h2>
+<table>
+<thead>
+<tr>
+<th>AI Opportunity</th>
+<th>Business Area</th>
+<th>AI Method</th>
+<th>Expected Benefit</th>
+<th>Impact (1-5)</th>
+<th>Effort (1-5)</th>
+<th>Rationale Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Customer Sentiment Analysis</td>
+<td>Customer Experience</td>
+<td>Natural Language Processing</td>
+<td>Improved customer insights and loyalty</td>
+<td>4</td>
+<td>3</td>
+<td>Moderate effort to implement NLP on existing data</td>
+</tr>
+<tr>
+<td>2. Process Automation</td>
+<td>Efficiency</td>
+<td>Robotic Process Automation</td>
+<td>Reduced manual workload and errors</td>
+<td>5</td>
+<td>2</td>
+<td>High impact with relatively low implementation cost</td>
+</tr>
+<tr>
+<td>3. Predictive Sales Analytics</td>
+<td>Revenue Growth</td>
+<td>Machine Learning</td>
+<td>Better sales forecasting and targeting</td>
+<td>4</td>
+<td>4</td>
+<td>Requires quality data but drives revenue uplift</td>
+</tr>
+<tr>
+<td>4. Personalised Marketing</td>
+<td>Customer Experience</td>
+<td>Recommendation Systems</td>
+<td>Increased conversion rates and retention</td>
+<td>4</td>
+<td>3</td>
+<td>Leverages customer data for tailored campaigns</td>
+</tr>
+<tr>
+<td>5. Fraud Detection</td>
+<td>Risk Management</td>
+<td>Anomaly Detection</td>
+<td>Reduced financial and reputational risk</td>
+<td>3</td>
+<td>4</td>
+<td>Complex but critical for risk-heavy sectors</td>
+</tr>
+<tr>
+<td>6. AI-driven Product Innovation</td>
+<td>Revenue Growth</td>
+<td>Generative AI</td>
+<td>Accelerated new product/service design</td>
+<td>3</td>
+<td>5</td>
+<td>High effort but potential for differentiation</td>
+</tr>
+<tr>
+<td>7. Employee Productivity Tools</td>
+<td>Efficiency</td>
+<td>AI-powered Virtual Assistants</td>
+<td>Enhanced workforce efficiency</td>
+<td>3</td>
+<td>3</td>
+<td>Improves internal collaboration and task management</td>
+</tr>
+<tr>
+<td>8. Compliance Monitoring</td>
+<td>Risk Management</td>
+<td>NLP and Rule-based AI</td>
+<td>Automated regulatory compliance checks</td>
+<td>4</td>
+<td>4</td>
+<td>Reduces risk of fines and reputational damage</td>
+</tr>
+</tbody>
+</table>
+<h2>Top Five Opportunity Deep Dives</h2>
+<h3>1. Customer Sentiment Analysis</h3>
+<p><strong>Problem today:</strong><br />
+PHMG likely lacks real-time, actionable insights into customer sentiment, limiting its ability to respond to feedback and improve satisfaction.</p>
+<p><strong>AI fix:</strong><br />
+Deploy Natural Language Processing (NLP) tools to analyse customer communications (emails, social media, surveys) to extract sentiment trends and pain points.</p>
+<p><strong>Delivery needs:</strong></p>
+<ul>
+<li>Access to customer interaction data</li>
+<li>NLP platform integration</li>
+<li>Data science expertise for model tuning</li>
+</ul>
+<p><strong>Risks &amp; mitigations:</strong></p>
+<ul>
+<li>Data privacy concerns mitigated by anonymisation and compliance checks</li>
+<li>Model bias addressed through diverse training data</li>
+</ul>
+<p><strong>ROI narrative:</strong><br />
+Improved customer retention and upsell opportunities could increase revenue by £200k–£500k annually, with a confidence level of medium due to data gaps.</p>
+<hr />
+<h3>2. Process Automation</h3>
+<p><strong>Problem today:</strong><br />
+Manual, repetitive tasks increase operational costs and error rates.</p>
+<p><strong>AI fix:</strong><br />
+Implement Robotic Process Automation (RPA) to automate routine workflows such as invoicing, data entry, and reporting.</p>
+<p><strong>Delivery needs:</strong></p>
+<ul>
+<li>Process mapping and prioritisation</li>
+<li>RPA software deployment</li>
+<li>Change management and staff training</li>
+</ul>
+<p><strong>Risks &amp; mitigations:</strong></p>
+<ul>
+<li>Resistance to change mitigated by clear communication and upskilling</li>
+<li>Process exceptions managed by hybrid human-AI workflows</li>
+</ul>
+<p><strong>ROI narrative:</strong><br />
+Potential cost savings of £300k–£700k per year from reduced labour and error correction, with high confidence.</p>
+<hr />
+<h3>3. Predictive Sales Analytics</h3>
+<p><strong>Problem today:</strong><br />
+Sales forecasting is imprecise, leading to inventory mismanagement and missed revenue targets.</p>
+<p><strong>AI fix:</strong><br />
+Use machine learning models to analyse historical sales and external factors for accurate demand prediction.</p>
+<p><strong>Delivery needs:</strong></p>
+<ul>
+<li>Historical sales and market data</li>
+<li>Data engineering and ML model development</li>
+<li>Integration with sales and inventory systems</li>
+</ul>
+<p><strong>Risks &amp; mitigations:</strong></p>
+<ul>
+<li>Data quality issues addressed by cleansing and validation</li>
+<li>Model drift managed by continuous retraining</li>
+</ul>
+<p><strong>ROI narrative:</strong><br />
+Improved forecasting could boost revenue by £400k–£900k annually, with medium confidence pending data availability.</p>
+<hr />
+<h3>4. Personalised Marketing</h3>
+<p><strong>Problem today:</strong><br />
+Generic marketing campaigns yield low engagement and conversion.</p>
+<p><strong>AI fix:</strong><br />
+Deploy recommendation engines and customer segmentation to deliver personalised offers.</p>
+<p><strong>Delivery needs:</strong></p>
+<ul>
+<li>Customer data platform</li>
+<li>AI recommendation algorithms</li>
+<li>Marketing automation tools</li>
+</ul>
+<p><strong>Risks &amp; mitigations:</strong></p>
+<ul>
+<li>Privacy compliance ensured by opt-in policies</li>
+<li>Over-personalisation avoided by balanced content strategies</li>
+</ul>
+<p><strong>ROI narrative:</strong><br />
+Increased conversion rates could add £250k–£600k in revenue yearly, with medium-high confidence.</p>
+<hr />
+<h3>5. Fraud Detection</h3>
+<p><strong>Problem today:</strong><br />
+Potential exposure to fraudulent transactions or activities.</p>
+<p><strong>AI fix:</strong><br />
+Implement anomaly detection algorithms to flag suspicious behaviour in real time.</p>
+<p><strong>Delivery needs:</strong></p>
+<ul>
+<li>Transactional data access</li>
+<li>AI model development and tuning</li>
+<li>Alert and response workflows</li>
+</ul>
+<p><strong>Risks &amp; mitigations:</strong></p>
+<ul>
+<li>False positives minimised by threshold tuning</li>
+<li>Continuous monitoring to adapt to new fraud patterns</li>
+</ul>
+<p><strong>ROI narrative:</strong><br />
+Fraud reduction could save £150k–£400k annually, with medium confidence depending on fraud risk profile.</p>
+<h2>Competitor &amp; Industry View</h2>
+<p>Without specific competitor data for PHMG, we analyse analogous companies in sectors commonly adopting AI:</p>
+<ul>
+<li><strong>WPP Group (Marketing &amp; Communications):</strong> Uses AI for customer insights and campaign optimisation, showing strong ROI from personalised marketing.</li>
+<li><strong>Accenture (Consulting &amp; Technology):</strong> Invests heavily in AI-driven automation and predictive analytics, enabling operational efficiency and client value creation.</li>
+<li><strong>Cognizant (IT Services):</strong> Focuses on AI-powered risk management and compliance solutions, reducing client exposure to regulatory penalties.</li>
+</ul>
+<p><strong>Lessons for PHMG:</strong></p>
+<ul>
+<li>Early adoption of AI in customer experience drives competitive differentiation.</li>
+<li>Automation delivers rapid cost savings and scalability.</li>
+<li>Risk management AI is increasingly a compliance necessity.</li>
+</ul>
+<p><strong>Whitespace:</strong></p>
+<ul>
+<li>PHMG can differentiate by integrating AI across multiple business areas rather than siloed pilots.</li>
+<li>Leveraging generative AI for innovation remains underexploited by many peers.</li>
+</ul>
+<h2>Recommendations &amp; Timeline</h2>
+<p><strong>0–3 months (Quick wins):</strong></p>
+<ul>
+<li>Conduct discovery workshops to fill data gaps and validate pain points.</li>
+<li>Pilot process automation on high-volume manual tasks.</li>
+<li>Deploy basic customer sentiment analysis on existing feedback channels.</li>
+</ul>
+<p><strong>3–9 months (Medium-term bets):</strong></p>
+<ul>
+<li>Develop predictive sales analytics models with integrated data sources.</li>
+<li>Launch personalised marketing campaigns using AI-driven segmentation.</li>
+<li>Begin building AI-powered employee productivity tools.</li>
+</ul>
+<p><strong>9–18 months (Longer-term investments):</strong></p>
+<ul>
+<li>Explore generative AI for product/service innovation and ideation.</li>
+<li>Implement advanced fraud detection and compliance monitoring systems.</li>
+<li>Establish continuous AI governance and model monitoring frameworks.</li>
+</ul>
+<p>This phased approach balances rapid value realisation with strategic AI maturity building.</p>
+<h2>Appendix – Sources, Notes &amp; Assumptions</h2>
+<p><strong>Sources:</strong></p>
+<ul>
+<li>No direct sources available; all insights based on industry best practices and AI adoption trends (Data gap – no PHMG-specific data).</li>
+<li>Competitor analysis based on publicly available information on WPP, Accenture, Cognizant (Next research step: detailed competitor benchmarking).</li>
+</ul>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>All financial ROI estimates are indicative, based on typical AI project outcomes in comparable companies.</li>
+<li>Impact and effort scores are subjective, derived from AI implementation complexity and expected business value.</li>
+</ul>
+<p><strong>Assumptions:</strong></p>
+<ul>
+<li>PHMG operates in a sector where customer experience, operational efficiency, risk, and revenue growth are priorities.</li>
+<li>PHMG has or can access relevant data assets to support AI initiatives.</li>
+<li>Regulatory environment includes data privacy and industry-specific compliance requirements.</li>
+</ul>
+<p><strong>Confidence levels:</strong></p>
+<ul>
+<li>Medium confidence overall due to significant data gaps.</li>
+<li>Confidence will improve with PHMG’s internal data and process disclosures.</li>
+</ul>
+<hr />
+<p>Teho Consulting looks forward to partnering with PHMG to refine this AI opportunity roadmap and support successful implementation.</p>
+
+            </section>
+          </div>
+        </div>
+      </body>
+    </html>
